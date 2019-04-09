@@ -30,7 +30,7 @@ public func warn(_ items: Any..., separator: String = " ", terminator: String = 
   // There's a bug related to "print" in Swift 5.0 on Linux.
   #if os(Linux) && compiler(>=5.0) && compiler(<5.1)
   string.utf8CString.withUnsafeBytes {
-    _ = write(FileHandle._changeableStandardError.fileDescriptor, $0.baseAddress, $0.count)
+    _ = write(FileHandle._changeableStandardError.fileDescriptor, $0.baseAddress, $0.count - 1)
   }
   #else
   print(string, separator:"", terminator:"", to:&FileHandle._changeableStandardError)
