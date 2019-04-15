@@ -16,6 +16,7 @@ extension DataTests {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__DataTests = [
+        ("test_base32", test_base32),
         ("test_quotedPrintable", test_quotedPrintable),
         ("test_relativeIndex", test_relativeIndex),
         ("test_view", test_view),
