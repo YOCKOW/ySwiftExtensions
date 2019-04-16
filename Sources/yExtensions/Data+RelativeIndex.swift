@@ -11,14 +11,10 @@ extension Data {
   /// Represetnts the distance from `startIndex`.
   public struct RelativeIndex: Comparable {
     private var _distance: Data.Index
-    fileprivate init(_ distance:Int) {
-      assert(distance >= 0)
-      self._distance = distance
-    }
     
-    public init?(distance:Int) {
-      guard distance >= 0 else { return nil }
-      self.init(distance)
+    public init(_ distance:Int) {
+      precondition(distance >= 0, "The value of distance must be positive or zero.")
+      self._distance = distance
     }
     
     fileprivate func actualIndex(for data:Data) -> Data.Index {
