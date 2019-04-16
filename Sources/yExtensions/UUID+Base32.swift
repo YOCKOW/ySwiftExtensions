@@ -26,6 +26,7 @@ extension UUID {
     }
     
     let uuidPointer = UnsafeMutablePointer<uuid_t>.allocate(capacity: 1)
+    defer { uuidPointer.deallocate() }
     uuidPointer.withMemoryRebound(to: UInt8.self, capacity: size) {
       for ii in 0..<size {
         $0[ii] = data[ii]
