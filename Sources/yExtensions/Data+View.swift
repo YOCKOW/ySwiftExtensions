@@ -36,8 +36,8 @@ extension Data {
         self._index = index
         
         let length = MemoryLayout<UnsignedIntegerType>.size
-        let lower = Data.RelativeIndex(distance:index * length)!
-        let upper = Data.RelativeIndex(distance:(index + 1) * length)!
+        let lower = Data.RelativeIndex(index * length)
+        let upper = Data.RelativeIndex((index + 1) * length)
         self._relativeRange = lower..<upper
       }
       
@@ -46,7 +46,7 @@ extension Data {
         assert(range.upperBound - range.lowerBound == MemoryLayout<UnsignedIntegerType>.size)
         self._index = range.lowerBound / MemoryLayout<UnsignedIntegerType>.size
         self._relativeRange =
-          Data.RelativeIndex(distance:range.lowerBound)!..<Data.RelativeIndex(distance:range.upperBound)!
+          Data.RelativeIndex(range.lowerBound)..<Data.RelativeIndex(range.upperBound)
       }
       
       fileprivate static func +(lhs:Index, rhs:Int) -> Index {
@@ -190,7 +190,7 @@ extension Data.View {
     var unswapped: UnsignedIntegerType = 0
     Swift.withUnsafeMutableBytes(of:&unswapped) { (pointer:UnsafeMutableRawBufferPointer) -> Void in
       for ii in 0..<data.count {
-        pointer[ii] = data[Data.RelativeIndex(distance:ii)!]
+        pointer[ii] = data[Data.RelativeIndex(ii)]
       }
     }
     
