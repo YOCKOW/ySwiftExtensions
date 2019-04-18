@@ -25,15 +25,24 @@ extension FileHandle {
 
 /// Print objects to standard error
 public func warn(_ items: Any..., separator: String = " ", terminator: String = "\n") {
-  let string = items.map{ String(describing:$0) }.joined(separator:separator) + terminator
-  
   // There's a bug related to "print" in Swift 5.0 on Linux.
   #if os(Linux) && compiler(>=5.0) && compiler(<5.1)
-  string.utf8CString.withUnsafeBytes {
-    _ = write(FileHandle._changeableStandardError.fileDescriptor, $0.baseAddress, $0.count - 1)
-  }
+  let string = items.map{ String(describing:$0) }.joined(separator:separator) + terminator
+  FileHandle._changeableStandardError.write(string)
   #else
-  print(string, separator:"", terminator:"", to:&FileHandle._changeableStandardError)
+  var stderr = FileHandle._changeableStandardError
+  let numberOfItems = items.count
+  switch numberOfItems {
+  case 0:
+    print("", separator:separator, terminator:terminator, to:&stderr)
+  case 1:
+    print(items[0], separator:separator, terminator:terminator, to:&stderr)
+  default:
+    for ii in 0..<(numberOfItems - 1) {
+      print(items[ii], separator, separator:"", terminator:"", to:&stderr)
+    }
+    print(items.last!, separator:"", terminator:terminator, to:&stderr)
+  }
   #endif
 }
 
