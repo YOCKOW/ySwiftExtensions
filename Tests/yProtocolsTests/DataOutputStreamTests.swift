@@ -19,20 +19,6 @@ final class DataOutputStreamTests: XCTestCase {
   }
   
   func test_fileHandle() throws {
-    func _temporaryFileHandle(contents: Data? = nil) throws -> FileHandle {
-      func _tmp() -> URL {
-        if #available(macOS 10.12, *) {
-          return FileManager.default.temporaryDirectory
-        } else {
-          return URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
-        }
-      }
-      
-      let url = _tmp().appendingPathComponent(UUID().uuidString)
-      FileManager.default.createFile(atPath: url.path, contents: contents)
-      return try FileHandle(forUpdating: url)
-    }
-    
     let data = Data([0,1,2,3])
     let source = try _temporaryFileHandle(contents: data)
     var target = try _temporaryFileHandle()
