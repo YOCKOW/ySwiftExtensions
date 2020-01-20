@@ -12,7 +12,7 @@ import Foundation
 final class FileHandleProtocolTests: XCTestCase {
   func test_fileHandle() throws {
     let fh = try _temporaryFileHandle()
-    let capsule = AnyFileHandle(fh)
+    var capsule = AnyFileHandle(fh)
     
     try capsule.seek(toOffset: 0)
     try capsule.write(contentsOf: Data([0,1,2,3]))

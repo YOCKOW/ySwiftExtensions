@@ -67,7 +67,7 @@ public struct AnyFileHandle: FileHandleProtocol {
   }
   
   private class _SomeType<T>: _Box where T: FileHandleProtocol {
-    private let _base: T
+    private var _base: T
     fileprivate init(_ base: T) { self._base = base }
     
     fileprivate override func close() throws {
