@@ -30,3 +30,64 @@ extension FileHandleProtocol {
     return try self.read(upToCount: Int.max)
   }
 }
+
+
+// MARK: Legacy APIs
+
+private func _getData(_ body: () throws -> Data?) -> Data {
+  // "try?" causes double-optional value in Swift <5.0
+  do {
+    guard let data = try body() else { return Data() }
+    return data
+  } catch {
+    return Data()
+  }
+}
+
+extension FileHandleProtocol {
+  @available(*, deprecated, renamed: "close()")
+  public mutating func closeFile() {
+    try? self.close()
+  }
+  
+  @available(*, deprecated, renamed: "offset()")
+  public var offsetInFile: UInt64 {
+    return try! self.offset()
+  }
+  
+  @available(*, deprecated, renamed: "read(upToCount:)")
+  public mutating func readData(ofLength length: Int) -> Data {
+    return _getData { try self.read(upToCount: length) }
+    
+  }
+  
+  @available(*, deprecated, renamed: "readToEnd()")
+  public mutating func readDataToEndOfFile() -> Data {
+    return _getData { try self.readToEnd() }
+  }
+  
+  @available(*, deprecated, renamed: "seek(toOffset:)")
+  public mutating func seek(toFileOffset offset: UInt64) {
+    try! self.seek(toOffset: offset)
+  }
+  
+  @available(*, deprecated, renamed: "seekToEnd()")
+  @discardableResult public mutating func seekToEndOfFile() -> UInt64 {
+    return try! self.seekToEnd()
+  }
+  
+  @available(*, deprecated, renamed: "synchronize()")
+  public mutating func synchronizeFile() {
+    try! self.synchronize()
+  }
+  
+  @available(*, deprecated, renamed: "truncate(atOffset:)")
+  public mutating func truncateFile(atOffset offset: UInt64) {
+    try! self.truncate(atOffset: offset)
+  }
+  
+  @available(*, deprecated, renamed: "write(contentsOf:)")
+  public mutating func write(_ data: Data) {
+    try! self.write(contentsOf: data)
+  }
+}
