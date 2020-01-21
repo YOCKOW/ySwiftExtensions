@@ -8,7 +8,7 @@
 import Foundation
 
 /// A type-erasure for `FileHandleProtocol`.
-public struct AnyFileHandle: FileHandleProtocol {
+public final class AnyFileHandle: FileHandleProtocol {
   private class _Box {
     private func _mustBeOverridden(function: StaticString = #function, file: StaticString = #file, line: UInt = #line) -> Never {
       fatalError("\(function) must be overridden.", file: file, line: line)
@@ -118,6 +118,9 @@ public struct AnyFileHandle: FileHandleProtocol {
     self._box = _SomeType<T>(fileHandle)
   }
   
+  public var availableData: Data {
+    do { return try self._box.readToEnd() ?? Data() } catch { return Data() }
+  }
   
   public func close() throws {
     return try self._box.close()
