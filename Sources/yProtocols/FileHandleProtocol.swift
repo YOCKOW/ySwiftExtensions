@@ -26,6 +26,12 @@ public protocol FileHandleProtocol {
 }
 
 extension FileHandleProtocol {
+  public var availableData: Data {
+    mutating get {
+      do { return try self.readToEnd() ?? Data() } catch { return Data() }
+    }
+  }
+  
   public mutating func readToEnd() throws -> Data? {
     return try self.read(upToCount: Int.max)
   }
