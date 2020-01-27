@@ -8,6 +8,7 @@ DataOutputStreamTests.swift
 import XCTest
 @testable import yProtocols
 import Foundation
+import _yExtensionsTests_support
 
 final class DataOutputStreamTests: XCTestCase {
   func test_data() {

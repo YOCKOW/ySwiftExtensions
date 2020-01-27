@@ -8,6 +8,7 @@
 import XCTest
 @testable import yProtocols
 import Foundation
+import _yExtensionsTests_support
 
 final class FileHandleProtocolTests: XCTestCase {
   func test_fileHandle() throws {

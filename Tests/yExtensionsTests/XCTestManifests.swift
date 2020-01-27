@@ -37,6 +37,7 @@ extension FileHandleTests {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__FileHandleTests = [
+        ("test_readToByte", test_readToByte),
         ("test_warn", test_warn),
     ]
 }

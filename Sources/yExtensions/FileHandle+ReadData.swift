@@ -6,18 +6,30 @@
  ************************************************************************************************ */
  
 import Foundation
+import _yExtensions_support
 
 extension FileHandle {
   /// Read data until the given `byte` appears.
-  public func readData(toByte byte:UInt8, maximumLength:Int = Int.max) -> Data {
+  public func read(toByte byte: UInt8, upToCount count: Int = Int.max) throws -> Data? {
     var result = Data()
-    for _ in 0..<maximumLength {
-      let byteData = self.readData(ofLength:1)
+    for _ in 0..<count {
+      guard let byteData = try self._read(upToCount: 1) else { break }
       if byteData.isEmpty { break }
       result.append(byteData)
       if byteData[0] == byte { return result }
     }
-    return result
+    return result.isEmpty ? nil : result
+  }
+  
+  /// Read data until the given `byte` appears.
+  @available(*, deprecated, renamed: "read(toByte:upToCount:)")
+  public func readData(toByte byte:UInt8, maximumLength:Int = Int.max) -> Data {
+    do {
+      let result = try self.read(toByte: byte, upToCount: maximumLength)
+      return result == nil ? Data() : result!
+    } catch {
+      return Data()
+    }
   }
 }
 
