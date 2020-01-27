@@ -6,6 +6,7 @@
  ************************************************************************************************ */
  
 import Foundation
+import _yExtensions_support
 
 /// A type-erasure for `FileHandleProtocol`.
 public final class AnyFileHandle: FileHandleProtocol {

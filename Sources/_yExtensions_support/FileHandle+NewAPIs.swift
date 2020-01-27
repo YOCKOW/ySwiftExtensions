@@ -10,7 +10,7 @@ import Foundation
 // FileHandle's new APIs to be used in any version...
 
 extension FileHandle {
-  internal func _close() throws {
+  public func _close() throws {
     #if !canImport(ObjectiveC)
       #if swift(>=5.0)
         try self.close()
@@ -26,7 +26,7 @@ extension FileHandle {
     #endif
   }
   
-  internal func _offset() throws -> UInt64 {
+  public func _offset() throws -> UInt64 {
     #if !canImport(ObjectiveC)
       #if swift(>=5.0)
         return try self.offset()
@@ -42,11 +42,11 @@ extension FileHandle {
     #endif
   }
   
-  internal func _readToEnd() throws -> Data? {
+  public func _readToEnd() throws -> Data? {
     return try self._read(upToCount: Int.max)
   }
   
-  internal func _read(upToCount count: Int) throws -> Data? {
+  public func _read(upToCount count: Int) throws -> Data? {
     func __read(upToCount count: Int) throws -> Data? {
       #if !canImport(ObjectiveC)
         #if swift(>=5.0)
@@ -65,7 +65,7 @@ extension FileHandle {
     return try __read(upToCount: count).flatMap { $0.count == 0 ? nil : $0 }
   }
   
-  internal func _seekToEnd()throws -> UInt64 {
+  public func _seekToEnd()throws -> UInt64 {
     #if !canImport(ObjectiveC)
       #if swift(>=5.0)
         return try self.seekToEnd()
@@ -81,7 +81,7 @@ extension FileHandle {
     #endif
   }
   
-  internal func _seek(toOffset offset: UInt64) throws {
+  public func _seek(toOffset offset: UInt64) throws {
     #if !canImport(ObjectiveC)
       #if swift(>=5.0)
         try self.seek(toOffset: offset)
@@ -97,7 +97,7 @@ extension FileHandle {
     #endif
   }
   
-  internal func _synchronize() throws {
+  public func _synchronize() throws {
     #if !canImport(ObjectiveC)
       #if swift(>=5.0)
         try self.synchronize()
@@ -113,7 +113,7 @@ extension FileHandle {
     #endif
   }
   
-  internal func _truncate(atOffset offset: UInt64) throws {
+  public func _truncate(atOffset offset: UInt64) throws {
     #if !canImport(ObjectiveC)
       // https://bugs.swift.org/browse/SR-11922
       #if swift(>=5.3)
@@ -132,7 +132,7 @@ extension FileHandle {
     #endif
   }
   
-  internal func _write<D>(contentsOf data: D) throws where D: DataProtocol {
+  public func _write<D>(contentsOf data: D) throws where D: DataProtocol {
     #if !canImport(ObjectiveC)
       #if swift(>=5.0)
         try self.write(contentsOf: data)
