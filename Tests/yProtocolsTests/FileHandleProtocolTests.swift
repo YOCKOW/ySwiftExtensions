@@ -20,5 +20,9 @@ final class FileHandleProtocolTests: XCTestCase {
     try capsule.seek(toOffset: 0)
     let data = try capsule.readToEnd()
     XCTAssertEqual(data, Data([0,1,2,3]))
+    
+    try capsule.seek(toOffset: 1)
+    let to2 = try capsule.read(toByte: 2)
+    XCTAssertEqual(to2, Data([1,2]))
   }
 }

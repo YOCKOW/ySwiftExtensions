@@ -32,6 +32,18 @@ extension FileHandleProtocol {
     }
   }
   
+  /// Read data until the given `byte` appears.
+  public mutating func read(toByte byte: UInt8, upToCount count: Int = Int.max) throws -> Data {
+    var result = Data()
+    for _ in 0..<count {
+      guard let byteData = try self.read(upToCount: 1) else { break }
+      if byteData.isEmpty { break }
+      result.append(byteData)
+      if byteData[0] == byte { return result }
+    }
+    return result
+  }
+  
   public mutating func readToEnd() throws -> Data? {
     return try self.read(upToCount: Int.max)
   }
