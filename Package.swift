@@ -16,8 +16,9 @@ let package = Package(
   targets: [
     // Targets are the basic building blocks of a package. A target can define a module or a test suite.
     // Targets can depend on other targets in this package, and on products in packages which this package depends on.
-    .target(name: "yExtensions", dependencies: ["SwiftUnicodeSupplement"]),
-    .target(name: "yProtocols"),
+    .target(name: "_yExtensions_support"),
+    .target(name: "yExtensions", dependencies: ["SwiftUnicodeSupplement", "_yExtensions_support"]),
+    .target(name: "yProtocols", dependencies: ["_yExtensions_support"]),
     .testTarget(name: "yExtensionsTests", dependencies: ["yExtensions"]),
     .testTarget(name: "yProtocolsTests", dependencies: ["yProtocols"]),
   ],
