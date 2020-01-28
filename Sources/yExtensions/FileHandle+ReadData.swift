@@ -6,14 +6,14 @@
  ************************************************************************************************ */
  
 import Foundation
-import _yExtensions_support
+import yNewAPI
 
 extension FileHandle {
   /// Read data until the given `byte` appears.
   public func read(toByte byte: UInt8, upToCount count: Int = Int.max) throws -> Data? {
     var result = Data()
     for _ in 0..<count {
-      guard let byteData = try self._read(upToCount: 1) else { break }
+      guard let byteData = try self.newAPI.read(upToCount: 1) else { break }
       if byteData.isEmpty { break }
       result.append(byteData)
       if byteData[0] == byte { return result }
