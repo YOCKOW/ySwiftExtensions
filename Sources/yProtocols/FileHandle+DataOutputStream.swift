@@ -6,7 +6,7 @@
  ************************************************************************************************ */
  
 import Foundation
-import _yExtensions_support
+import yNewAPI
 
 private let _SIZE_TO_READ = 1024
 extension FileHandle: DataOutputStream, DataOutputStreamable {

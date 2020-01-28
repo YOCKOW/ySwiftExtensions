@@ -6,7 +6,7 @@
  ************************************************************************************************ */
  
 import Foundation
-import _yExtensions_support
+import yNewAPI
 
 extension FileHandle {
   /// Read data until the given `byte` appears.

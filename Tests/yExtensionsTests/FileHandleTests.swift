@@ -7,7 +7,7 @@
  
 import XCTest
 @testable import yExtensions
-import _yExtensions_support
+import yNewAPI
 import _yExtensionsTests_support
 
 final class FileHandleTests: XCTestCase {

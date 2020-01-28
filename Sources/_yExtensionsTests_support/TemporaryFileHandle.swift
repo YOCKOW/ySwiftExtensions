@@ -6,7 +6,7 @@
  ************************************************************************************************ */
  
 import Foundation
-import _yExtensions_support
+import yNewAPI
 
 private var _fileHandles: [(url: URL, fileHandle: FileHandle)] = []
 private func _closeAllFileHandles() {
