@@ -8,7 +8,7 @@
 import Foundation
 import _yExtensions_support
 
-/// A type-erasure for `FileHandleProtocol`.
+/// A type-erasure for `FileHandleProtocol` or `FileHandle`.
 public final class AnyFileHandle: FileHandleProtocol {
   private class _Box {
     private func _mustBeOverridden(function: StaticString = #function, file: StaticString = #file, line: UInt = #line) -> Never {
@@ -31,39 +31,39 @@ public final class AnyFileHandle: FileHandleProtocol {
     fileprivate init(_ fileHandle: FileHandle) { self._fileHandle = fileHandle }
     
     fileprivate override func close() throws {
-      try self._fileHandle._close()
+      try self._fileHandle.newAPI.close()
     }
     
     fileprivate override func offset() throws -> UInt64 {
-      return try self._fileHandle._offset()
+      return try self._fileHandle.newAPI.offset()
     }
     
     fileprivate override func readToEnd() throws -> Data? {
-      return try self._fileHandle._readToEnd()
+      return try self._fileHandle.newAPI.readToEnd()
     }
     
     fileprivate override func read(upToCount count: Int) throws -> Data? {
-      return try self._fileHandle._read(upToCount: count)
+      return try self._fileHandle.newAPI.read(upToCount: count)
     }
     
     fileprivate override func seekToEnd() throws -> UInt64 {
-      return try self._fileHandle._seekToEnd()
+      return try self._fileHandle.newAPI.seekToEnd()
     }
     
     fileprivate override func seek(toOffset offset: UInt64) throws {
-      try self._fileHandle._seek(toOffset: offset)
+      try self._fileHandle.newAPI.seek(toOffset: offset)
     }
     
     fileprivate override func synchronize() throws {
-      try self._fileHandle._synchronize()
+      try self._fileHandle.newAPI.synchronize()
     }
     
     fileprivate override func truncate(atOffset offset: UInt64) throws {
-      try self._fileHandle._truncate(atOffset: offset)
+      try self._fileHandle.newAPI.truncate(atOffset: offset)
     }
     
     fileprivate override func write<T: DataProtocol>(contentsOf data: T) throws {
-      try self._fileHandle._write(contentsOf: data)
+      try self._fileHandle.newAPI.write(contentsOf: data)
     }
   }
   

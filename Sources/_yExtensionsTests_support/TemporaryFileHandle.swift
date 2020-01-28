@@ -12,7 +12,7 @@ private var _fileHandles: [(url: URL, fileHandle: FileHandle)] = []
 private func _closeAllFileHandles() {
   for (url, fh) in _fileHandles {
     do {
-      try fh._close()
+      try fh.newAPI.close()
       try FileManager.default.removeItem(at: url)
     } catch {
       
