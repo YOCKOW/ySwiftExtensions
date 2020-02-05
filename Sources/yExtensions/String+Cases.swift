@@ -7,7 +7,7 @@
  
 extension StringProtocol {
   fileprivate var _capitalizedForCamelCase: String {
-    if self.allSatisfy({ $0.isUppercase }) {
+    if self.allSatisfy({ $0.isUppercase || !$0.isLetter }) {
       return String(self)
     }
     return self.capitalized
@@ -38,7 +38,7 @@ extension String {
     // eg) "HTTPRequest" -> ["HTTP", "Request"]
     return result.filter({ !$0.isEmpty }).flatMap { (element: Substring) -> [Substring] in
       guard
-        let firstIndexOfNonUppercase = element.firstIndex(where: { !$0.isUppercase }),
+        let firstIndexOfNonUppercase = element.firstIndex(where: { $0.isLetter && !$0.isUppercase }),
         firstIndexOfNonUppercase > element.index(after: element.startIndex)
         else {
           return [element]

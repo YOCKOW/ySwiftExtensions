@@ -12,6 +12,8 @@ final class StringCaseTests: XCTestCase {
   func test_camelCase() {
     XCTAssertEqual("SMTPServer".lowerCamelCase, "smtpServer")
     XCTAssertEqual("hypertext-transfer-protocol".upperCamelCase, "HypertextTransferProtocol")
+    XCTAssertEqual("CCC10".lowerCamelCase, "ccc10")
+    XCTAssertEqual("CCC10".upperCamelCase, "CCC10")
   }
   
   func test_snakeCase() {
