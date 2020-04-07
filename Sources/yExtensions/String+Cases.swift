@@ -14,7 +14,7 @@ extension StringProtocol {
   }
 }
 
-extension String {
+extension StringProtocol where SubSequence == Substring {
   private func _splittedForCaseConversion() -> [Substring] {
     var result: [Substring] = []
     var position = self.startIndex
