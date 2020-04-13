@@ -11,11 +11,11 @@ import Foundation
 import _yExtensionsTests_support
 
 final class DataOutputStreamTests: XCTestCase {
-  func test_data() throws {
+  func test_data() {
     let source = Data([0,1,2,3])
     var target = Data()
     
-    try source.write(to: &target)
+    source.write(to: &target)
     XCTAssertEqual(source, target)
   }
   
@@ -24,7 +24,7 @@ final class DataOutputStreamTests: XCTestCase {
     let source = try _temporaryFileHandle(contents: data)
     var target = try _temporaryFileHandle()
     
-    try source.write(to: &target)
+    source.write(to: &target)
     if #available(macOS 10.15, *) {
       #if canImport(ObjectiveC) || swift(>=5.0)
       try target.seek(toOffset: 0)
