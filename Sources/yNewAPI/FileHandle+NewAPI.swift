@@ -40,11 +40,11 @@ extension FileHandle {
           return self._fileHandle.offsetInFile
         #endif
       #else
-  //    if #available(macOS 10.16, *) {
-  //      return try self.offset()
-  //    } else {
-        return self._fileHandle.offsetInFile
-  //    }
+        if #available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *) {
+          return try self._fileHandle.offset()
+        } else {
+          return self._fileHandle.offsetInFile
+        }
       #endif
     }
     
@@ -61,11 +61,11 @@ extension FileHandle {
             return self._fileHandle.readData(ofLength: count)
           #endif
         #else
-  //      if #available(macOS 10.16, *) {
-  //        return try? self.read(upToCount: count)
-  //      } else {
-          return self._fileHandle.readData(ofLength: count)
-  //      }
+          if #available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *) {
+            return try self._fileHandle.read(upToCount: count)
+          } else {
+            return self._fileHandle.readData(ofLength: count)
+          }
         #endif
       }
       return try _read(upToCount: count).flatMap { $0.count == 0 ? nil : $0 }
@@ -79,11 +79,11 @@ extension FileHandle {
           return self._fileHandle.seekToEndOfFile()
         #endif
       #else
-  //    if #available(macOS 10.16, *) {
-  //      try self.seekToEnd()
-  //    } else {
-        return self._fileHandle.seekToEndOfFile()
-  //    }
+        if #available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *) {
+          return try self._fileHandle.seekToEnd()
+        } else {
+          return self._fileHandle.seekToEndOfFile()
+        }
       #endif
     }
     
@@ -146,11 +146,11 @@ extension FileHandle {
           self._fileHandle.write(Data(data))
         #endif
       #else
-  //    if #available(macOS 10.16, *) {
-  //      try? self.write(contentsOf: data)
-  //    } else {
-        self._fileHandle.write(Data(data))
-  //    }
+        if #available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *) {
+          try self._fileHandle.write(contentsOf: data)
+        } else {
+          self._fileHandle.write(Data(data))
+        }
       #endif
     }
   }
