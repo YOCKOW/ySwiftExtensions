@@ -11,11 +11,20 @@ import Foundation
 /// An instance of `Data` is given to the stream.
 public protocol DataOutputStream {
   /// Appends the given data to the stream.
+  @available(*, deprecated, renamed: "write(contentsOf:)")
   mutating func write<D>(_ data: D) where D: DataProtocol
+  
+  mutating func write<D>(contentsOf data: D) throws where D: DataProtocol
+}
+
+extension DataOutputStream {
+  public mutating func write<D>(_ data: D) where D: DataProtocol {
+    try! self.write(contentsOf: data)
+  }
 }
 
 /// Similar with `TextOutputStreamable`.
 public protocol DataOutputStreamable {
   /// Writes a data representation of this instance into the given output stream.
-  func write<Target>(to target: inout Target) where Target: DataOutputStream
+  func write<Target>(to target: inout Target) throws where Target: DataOutputStream
 }

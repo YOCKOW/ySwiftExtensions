@@ -13,7 +13,7 @@ import Foundation
 /// - You can't make subclasses `FileHandle` correctly on Darwin due to [SR-11926](https://bugs.swift.org/browse/SR-11926).
 /// - `FileHandle` itself does not conform to `FileHandleProtocol` in this module,
 ///   because this protocol requires new APIs.
-public protocol FileHandleProtocol {
+public protocol FileHandleProtocol: DataOutputStream {
   mutating func close() throws
   func offset() throws -> UInt64
   mutating func readToEnd() throws -> Data?

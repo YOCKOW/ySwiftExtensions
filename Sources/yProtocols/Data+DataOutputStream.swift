@@ -8,13 +8,13 @@
 import Foundation
 
 extension DataProtocol {
-  public func write<Target>(to target: inout Target) where Target: DataOutputStream {
-    target.write(self)
+  public func write<Target>(to target: inout Target) throws where Target: DataOutputStream {
+    try target.write(contentsOf: self)
   }
 }
 
 extension MutableDataProtocol {
-  public mutating func write<D>(_ data: D) where D: DataProtocol {
+  public mutating func write<D>(contentsOf data: D) throws where D: DataProtocol {
     self.append(contentsOf: data)
   }
 }
