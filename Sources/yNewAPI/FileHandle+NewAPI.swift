@@ -33,19 +33,12 @@ extension FileHandle {
     }
   
     open func offset() throws -> UInt64 {
-      #if !canImport(ObjectiveC)
-        #if swift(>=5.0)
-          return try self._fileHandle.offset()
-        #else
-          return self._fileHandle.offsetInFile
-        #endif
-      #else
-        if #available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *) {
-          return try self._fileHandle.offset()
-        } else {
-          return self._fileHandle.offsetInFile
-        }
+      #if swift(>=5.0)
+      if #available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *) {
+        return try self._fileHandle.offset()
+      }
       #endif
+      return self._fileHandle.offsetInFile
     }
     
     open func readToEnd() throws -> Data? {
@@ -54,19 +47,12 @@ extension FileHandle {
     
     open func read(upToCount count: Int) throws -> Data? {
       func _read(upToCount count: Int) throws -> Data? {
-        #if !canImport(ObjectiveC)
-          #if swift(>=5.0)
-            return try self._fileHandle.read(upToCount: count)
-          #else
-            return self._fileHandle.readData(ofLength: count)
-          #endif
-        #else
-          if #available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *) {
-            return try self._fileHandle.read(upToCount: count)
-          } else {
-            return self._fileHandle.readData(ofLength: count)
-          }
+        #if swift(>=5.0)
+        if #available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *) {
+          return try self._fileHandle.read(upToCount: count)
+        }
         #endif
+        return self._fileHandle.readData(ofLength: count)
       }
       return try _read(upToCount: count).flatMap { $0.count == 0 ? nil : $0 }
     }
@@ -139,19 +125,13 @@ extension FileHandle {
     }
     
     open func write<D>(contentsOf data: D) throws where D: DataProtocol {
-      #if !canImport(ObjectiveC)
-        #if swift(>=5.0)
-          try self._fileHandle.write(contentsOf: data)
-        #else
-          self._fileHandle.write(Data(data))
-        #endif
-      #else
-        if #available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *) {
-          try self._fileHandle.write(contentsOf: data)
-        } else {
-          self._fileHandle.write(Data(data))
-        }
+      #if swift(>=5.0)
+      if #available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *) {
+        try self._fileHandle.write(contentsOf: data)
+        return
+      }
       #endif
+      self._fileHandle.write(Data(data))
     }
   }
   
