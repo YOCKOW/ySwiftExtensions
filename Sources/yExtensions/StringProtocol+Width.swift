@@ -21,26 +21,22 @@ extension Character {
       return 0
     }
     
-    // Regional indicators
-    if base.latestProperties.isRegionalIndicator {
-      if scalars.dropFirst().first?.latestProperties.isRegionalIndicator == true {
-        // e.g. 🇯🇵
-        return 2
-      } else {
-        return 1
-      }
-    }
-    
-    // e.g. 1⃝, A⃠
-    if scalars.contains(where: { $0.latestProperties.generalCategory == .enclosingMark }) {
-      return 2
-    }
-    
     // Others
     switch base.latestProperties.eastAsianWidth {
     case .ambiguous, .fullwidth, .wide:
       return 2
     case .halfwidth, .narrow, .neutral:
+      // Regional indicators
+      if base.latestProperties.isRegionalIndicator && scalars.dropFirst().first?.latestProperties.isRegionalIndicator == true {
+        // e.g. 🇯🇵
+        return 2
+      }
+      
+      // e.g. 1⃝, A⃠
+      if scalars.contains(where: { $0.latestProperties.generalCategory == .enclosingMark }) {
+        return 2
+      }
+      
       return 1
     }
   }
