@@ -10,10 +10,12 @@ import XCTest
 import Foundation
 import _yExtensionsTests_support
 
+@available(swift 5.0)
+@available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
 final class FileHandleProtocolTests: XCTestCase {
   func test_fileHandle() throws {
     let fh = try _temporaryFileHandle()
-    var capsule = AnyFileHandle(fh)
+    let capsule = AnyFileHandle(fh)
     
     try capsule.seek(toOffset: 0)
     try capsule.write(contentsOf: Data([0,1,2,3]))

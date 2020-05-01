@@ -10,6 +10,8 @@ import XCTest
 import Foundation
 import _yExtensionsTests_support
 
+@available(swift 5.0)
+@available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
 final class DataOutputStreamTests: XCTestCase {
   func test_data() throws {
     let source = Data([0,1,2,3])

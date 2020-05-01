@@ -1,13 +1,19 @@
-// swift-tools-version:5.0
+// swift-tools-version:5.1
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let package = Package(
   name: "ySwiftExtensions",
+  platforms: [
+    .macOS(.v10_15),
+    .iOS(.v13),
+    .watchOS(.v6),
+    .tvOS(.v13),
+  ],
   products: [
     // Products define the executables and libraries produced by a package, and make them visible to other packages.
-    .library(name: "ySwiftExtensions", type: .dynamic, targets: ["yExtensions", "yProtocols", "yNewAPI"]),
+    .library(name: "ySwiftExtensions", type: .dynamic, targets: ["yExtensions", "yProtocols"]),
   ],
   dependencies: [
     // Dependencies declare other packages that this package depends on.
@@ -16,14 +22,13 @@ let package = Package(
   targets: [
     // Targets are the basic building blocks of a package. A target can define a module or a test suite.
     // Targets can depend on other targets in this package, and on products in packages which this package depends on.
-    .target(name: "yNewAPI"),
-    .target(name: "yExtensions", dependencies: ["SwiftUnicodeSupplement", "yNewAPI"]),
-    .target(name: "yProtocols", dependencies: ["yNewAPI"]),
-    .target(name: "_yExtensionsTests_support", dependencies: ["yNewAPI"]),
+    .target(name: "yExtensions", dependencies: ["SwiftUnicodeSupplement"]),
+    .target(name: "yProtocols", dependencies: []),
+    .target(name: "_yExtensionsTests_support", dependencies: []),
     .testTarget(name: "yExtensionsTests", dependencies: ["yExtensions", "_yExtensionsTests_support"]),
     .testTarget(name: "yProtocolsTests", dependencies: ["yProtocols", "_yExtensionsTests_support"]),
   ],
-  swiftLanguageVersions: [.v4, .v4_2, .v5]
+  swiftLanguageVersions: [.v5]
 )
 
 import Foundation

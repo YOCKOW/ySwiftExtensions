@@ -7,8 +7,9 @@ and is intended to be used by it.
 
 # Requirements
 
-- Swift 5 (including compatibility mode for Swift 4 or 4.2)
-- macOS or Linux
+- Swift 5
+- macOS(>=10.15) or Linux
+
 
 ## Dependencies
 
