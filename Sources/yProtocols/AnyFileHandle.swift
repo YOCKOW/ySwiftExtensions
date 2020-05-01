@@ -6,9 +6,10 @@
  ************************************************************************************************ */
  
 import Foundation
-import yNewAPI
 
 /// A type-erasure for `FileHandleProtocol` or `FileHandle`.
+@available(swift 5.0)
+@available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
 public final class AnyFileHandle: FileHandleProtocol {
   private class _Box {
     private func _mustBeOverridden(function: StaticString = #function, file: StaticString = #file, line: UInt = #line) -> Never {
@@ -24,47 +25,6 @@ public final class AnyFileHandle: FileHandleProtocol {
     fileprivate func synchronize() throws { _mustBeOverridden() }
     fileprivate func truncate(atOffset offset: UInt64) throws { _mustBeOverridden() }
     fileprivate func write<T: DataProtocol>(contentsOf data: T) throws { _mustBeOverridden() }
-  }
-  
-  private class _SomeFileHandle: _Box {
-    private let _fileHandle: FileHandle
-    fileprivate init(_ fileHandle: FileHandle) { self._fileHandle = fileHandle }
-    
-    fileprivate override func close() throws {
-      try self._fileHandle.newAPI.close()
-    }
-    
-    fileprivate override func offset() throws -> UInt64 {
-      return try self._fileHandle.newAPI.offset()
-    }
-    
-    fileprivate override func readToEnd() throws -> Data? {
-      return try self._fileHandle.newAPI.readToEnd()
-    }
-    
-    fileprivate override func read(upToCount count: Int) throws -> Data? {
-      return try self._fileHandle.newAPI.read(upToCount: count)
-    }
-    
-    fileprivate override func seekToEnd() throws -> UInt64 {
-      return try self._fileHandle.newAPI.seekToEnd()
-    }
-    
-    fileprivate override func seek(toOffset offset: UInt64) throws {
-      try self._fileHandle.newAPI.seek(toOffset: offset)
-    }
-    
-    fileprivate override func synchronize() throws {
-      try self._fileHandle.newAPI.synchronize()
-    }
-    
-    fileprivate override func truncate(atOffset offset: UInt64) throws {
-      try self._fileHandle.newAPI.truncate(atOffset: offset)
-    }
-    
-    fileprivate override func write<T: DataProtocol>(contentsOf data: T) throws {
-      try self._fileHandle.newAPI.write(contentsOf: data)
-    }
   }
   
   private class _SomeType<T>: _Box where T: FileHandleProtocol {
@@ -110,10 +70,6 @@ public final class AnyFileHandle: FileHandleProtocol {
   
   
   private let _box: _Box
-  
-  public init(_ fileHandle: FileHandle) {
-    self._box = _SomeFileHandle(fileHandle)
-  }
   
   public init<T>(_ fileHandle: T) where T: FileHandleProtocol {
     self._box = _SomeType<T>(fileHandle)

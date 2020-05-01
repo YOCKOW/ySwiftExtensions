@@ -6,13 +6,17 @@
  ************************************************************************************************ */
  
 import Foundation
-import yNewAPI
 
 private var _fileHandles: [(url: URL, fileHandle: FileHandle)] = []
+
 private func _closeAllFileHandles() {
   for (url, fh) in _fileHandles {
     do {
-      try fh.newAPI.close()
+      if #available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *) {
+        try fh.close()
+      } else {
+        fh.closeFile()
+      }
       try FileManager.default.removeItem(at: url)
     } catch {
       
@@ -30,7 +34,7 @@ private func _register(url: URL, fileHandle: FileHandle) {
 
 public func _temporaryFileHandle(contents: Data? = nil) throws -> FileHandle {
   func _tmp() -> URL {
-    if #available(macOS 10.12, *) {
+    if #available(macOS 10.12, iOS 10.0, watchOS 3.0, tvOS 10.0, *) {
       return FileManager.default.temporaryDirectory
     } else {
       return URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)

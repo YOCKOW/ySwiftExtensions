@@ -10,30 +10,33 @@ import Foundation
 /// A type for objects like `FileHandle`.
 ///
 /// Notes:
-/// - You can't make subclasses `FileHandle` correctly on Darwin due to [SR-11926](https://bugs.swift.org/browse/SR-11926).
-/// - `FileHandle` itself does not conform to `FileHandleProtocol` in this module,
-///   because this protocol requires new APIs.
-public protocol FileHandleProtocol: DataOutputStream {
-  mutating func close() throws
+/// - You can't make subclasses `FileHandle` correctly on Darwin
+///   due to [SR-11926](https://bugs.swift.org/browse/SR-11926).
+@available(swift 5.0)
+@available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+public protocol FileHandleProtocol: class, DataOutputStream, DataOutputStreamable {
+  func close() throws
   func offset() throws -> UInt64
-  mutating func readToEnd() throws -> Data?
-  mutating func read(upToCount count: Int) throws -> Data?
-  @discardableResult mutating func seekToEnd() throws -> UInt64
-  mutating func seek(toOffset offset: UInt64) throws
-  mutating func synchronize() throws
-  mutating func truncate(atOffset offset: UInt64) throws
-  mutating func write<T: DataProtocol>(contentsOf data: T) throws
+  func readToEnd() throws -> Data?
+  func read(upToCount count: Int) throws -> Data?
+  @discardableResult func seekToEnd() throws -> UInt64
+  func seek(toOffset offset: UInt64) throws
+  func synchronize() throws
+  func truncate(atOffset offset: UInt64) throws
+  func write<T: DataProtocol>(contentsOf data: T) throws
 }
 
+@available(swift 5.0)
+@available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
 extension FileHandleProtocol {
   public var availableData: Data {
-    mutating get {
+    get {
       do { return try self.readToEnd() ?? Data() } catch { return Data() }
     }
   }
   
   /// Read data until the given `byte` appears.
-  public mutating func read(toByte byte: UInt8, upToCount count: Int = Int.max) throws -> Data? {
+  public func read(toByte byte: UInt8, upToCount count: Int = Int.max) throws -> Data? {
     var result = Data()
     for _ in 0..<count {
       guard let byteData = try self.read(upToCount: 1) else { break }
@@ -44,68 +47,21 @@ extension FileHandleProtocol {
     return result.isEmpty ? nil : result
   }
   
-  public mutating func readToEnd() throws -> Data? {
+  public func readToEnd() throws -> Data? {
     return try self.read(upToCount: Int.max)
   }
-}
-
-
-// MARK: Legacy APIs
-
-private func _getData(_ body: () throws -> Data?) -> Data {
-  // "try?" causes double-optional value in Swift <5.0
-  do {
-    guard let data = try body() else { return Data() }
-    return data
-  } catch {
-    return Data()
-  }
-}
-
-extension FileHandleProtocol {
-  @available(*, deprecated, renamed: "close()")
-  public mutating func closeFile() {
-    try? self.close()
-  }
   
-  @available(*, deprecated, renamed: "offset()")
-  public var offsetInFile: UInt64 {
-    return try! self.offset()
-  }
-  
-  @available(*, deprecated, renamed: "read(upToCount:)")
-  public mutating func readData(ofLength length: Int) -> Data {
-    return _getData { try self.read(upToCount: length) }
+  public func write<Target>(to target: inout Target) throws where Target: DataOutputStream {
+    let _SIZE_TO_READ = 1024
     
-  }
-  
-  @available(*, deprecated, renamed: "readToEnd()")
-  public mutating func readDataToEndOfFile() -> Data {
-    return _getData { try self.readToEnd() }
-  }
-  
-  @available(*, deprecated, renamed: "seek(toOffset:)")
-  public mutating func seek(toFileOffset offset: UInt64) {
-    try! self.seek(toOffset: offset)
-  }
-  
-  @available(*, deprecated, renamed: "seekToEnd()")
-  @discardableResult public mutating func seekToEndOfFile() -> UInt64 {
-    return try! self.seekToEnd()
-  }
-  
-  @available(*, deprecated, renamed: "synchronize()")
-  public mutating func synchronizeFile() {
-    try! self.synchronize()
-  }
-  
-  @available(*, deprecated, renamed: "truncate(atOffset:)")
-  public mutating func truncateFile(atOffset offset: UInt64) {
-    try! self.truncate(atOffset: offset)
-  }
-  
-  @available(*, deprecated, renamed: "write(contentsOf:)")
-  public mutating func write(_ data: Data) {
-    try! self.write(contentsOf: data)
+    let originalOffset = try self.offset()
+    while true {
+      var nilableData: Data? = nil
+      do { nilableData = try self.read(upToCount: _SIZE_TO_READ) } catch {}
+      guard let data = nilableData, !data.isEmpty else { break }
+      try target.write(contentsOf: data)
+    }
+    try self.seek(toOffset: originalOffset)
   }
 }
+

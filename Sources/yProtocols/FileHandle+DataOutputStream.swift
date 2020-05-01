@@ -6,23 +6,16 @@
  ************************************************************************************************ */
  
 import Foundation
-import yNewAPI
 
-// `func write(contentsOf:)` is available in macOS>=10.15
-// extension FileHandle: DataOutputStream {}
+@available(swift 5.0)
+@available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+extension FileHandle: FileHandleProtocol {}
 
-private let _SIZE_TO_READ = 1024
-extension FileHandle: DataOutputStreamable {
-  public func write<Target>(to target: inout Target) throws where Target : DataOutputStream {
-    let originalOffset = try self.newAPI.offset()
-    
-    while true {
-      // "try?" causes double-optional value in Swift <5.0
-      var nilableData: Data? = nil
-      do { nilableData = try self.newAPI.read(upToCount: _SIZE_TO_READ) } catch {}
-      guard let data = nilableData else { break }
-      try target.write(contentsOf: data)
-    }
-    try self.newAPI.seek(toOffset: originalOffset)
+// Workaround for https://bugs.swift.org/browse/SR-11922
+#if !canImport(ObjectiveC) && swift(<5.3)
+extension FileHandle {
+  public func truncate(atOffset offset: UInt64) throws {
+    try self.truncate(toOffset: offset)
   }
 }
+#endif
