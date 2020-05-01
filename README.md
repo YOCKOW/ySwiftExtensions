@@ -12,7 +12,7 @@ and is intended to be used by it.
 
 ## Dependencies
 
-* [SwiftUnicodeSupplement](https://github.com/YOCKOW/SwiftUnicodeSupplement)
+![Dependencies](./dependencies.svg)
 
 
 # License
