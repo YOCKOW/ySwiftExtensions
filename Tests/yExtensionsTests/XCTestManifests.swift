@@ -17,6 +17,7 @@ extension DataTests {
     // to regenerate.
     static let __allTests__DataTests = [
         ("test_base32", test_base32),
+        ("test_protocol", test_protocol),
         ("test_quotedPrintable", test_quotedPrintable),
         ("test_relativeIndex", test_relativeIndex),
         ("test_view", test_view),
@@ -37,6 +38,8 @@ extension FileHandleTests {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__FileHandleTests = [
+        ("test_dataOutputStream", test_dataOutputStream),
+        ("test_fileHandleProtocol", test_fileHandleProtocol),
         ("test_readToByte", test_readToByte),
         ("test_warn", test_warn),
     ]

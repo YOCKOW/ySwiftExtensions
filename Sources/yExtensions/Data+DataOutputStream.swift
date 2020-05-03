@@ -6,6 +6,7 @@
  ************************************************************************************************ */
  
 import Foundation
+import yProtocols
 
 extension DataProtocol {
   @available(swift 5.0)
