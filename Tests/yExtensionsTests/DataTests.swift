@@ -32,6 +32,14 @@ final class DataTests: XCTestCase {
     }
   }
   
+  func test_protocol() throws {
+    let source = Data([0,1,2,3])
+    var target = Data()
+    
+    try source.write(to: &target)
+    XCTAssertEqual(source, target)
+  }
+  
   func test_quotedPrintable() {
     // https://tools.ietf.org/html/rfc3492#section-7
     let sampleStrings: [String] = [

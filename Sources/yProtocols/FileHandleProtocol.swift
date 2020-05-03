@@ -14,7 +14,10 @@ import Foundation
 ///   due to [SR-11926](https://bugs.swift.org/browse/SR-11926).
 @available(swift 5.0)
 @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
-public protocol FileHandleProtocol: class, DataOutputStream, DataOutputStreamable {
+public protocol FileHandleProtocol: class,
+                                    DataOutputStream,
+                                    DataOutputStreamable,
+                                    TextOutputStream {
   func close() throws
   func offset() throws -> UInt64
   func readToEnd() throws -> Data?
@@ -24,6 +27,10 @@ public protocol FileHandleProtocol: class, DataOutputStream, DataOutputStreamabl
   func synchronize() throws
   func truncate(atOffset offset: UInt64) throws
   func write<T: DataProtocol>(contentsOf data: T) throws
+  
+  /// Write the data containing a representation of the String encoded using a given encoding.
+  /// See also `String.data(string:using:allowLossyConversion:)` for the details about parameters.
+  func write(string: String, using encoding: String.Encoding, allowLossyConversion: Bool) throws
 }
 
 @available(swift 5.0)
@@ -62,6 +69,10 @@ extension FileHandleProtocol {
       try target.write(contentsOf: data)
     }
     try self.seek(toOffset: originalOffset)
+  }
+  
+  public func write(_ string: String) {
+    try! self.write(string: string, using: .utf8, allowLossyConversion: false)
   }
 }
 

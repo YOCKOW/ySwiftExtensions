@@ -6,6 +6,7 @@
  ************************************************************************************************ */
  
 import Foundation
+import yProtocols
 
 /// A type-erasure for `FileHandleProtocol` or `FileHandle`.
 @available(swift 5.0)
@@ -25,6 +26,7 @@ public final class AnyFileHandle: FileHandleProtocol {
     fileprivate func synchronize() throws { _mustBeOverridden() }
     fileprivate func truncate(atOffset offset: UInt64) throws { _mustBeOverridden() }
     fileprivate func write<T: DataProtocol>(contentsOf data: T) throws { _mustBeOverridden() }
+    fileprivate func write(string: String, using encoding: String.Encoding, allowLossyConversion: Bool) throws { _mustBeOverridden() }
   }
   
   private class _SomeType<T>: _Box where T: FileHandleProtocol {
@@ -65,6 +67,10 @@ public final class AnyFileHandle: FileHandleProtocol {
     
     fileprivate override func write<T: DataProtocol>(contentsOf data: T) throws {
       try self._base.write(contentsOf: data)
+    }
+    
+    fileprivate override func write(string: String, using encoding: String.Encoding, allowLossyConversion: Bool) throws {
+      try self._base.write(string: string, using: encoding, allowLossyConversion: allowLossyConversion)
     }
   }
   
@@ -110,4 +116,26 @@ public final class AnyFileHandle: FileHandleProtocol {
   public func write<T>(contentsOf data: T) throws where T : DataProtocol {
     try self._box.write(contentsOf: data)
   }
+  
+  public func write(string: String, using encoding: String.Encoding, allowLossyConversion: Bool) throws {
+    try self._box.write(string: string, using: encoding, allowLossyConversion: allowLossyConversion)
+  }
+}
+
+
+extension AnyFileHandle {
+  /// The file handle associated with the standard error file.
+  @available(swift 5.0)
+  @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+  public static let standardError = AnyFileHandle(FileHandle.standardError)
+  
+  /// The file handle associated with the standard input file.
+  @available(swift 5.0)
+  @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+  public static let standardInput = AnyFileHandle(FileHandle.standardInput)
+  
+  /// The file handle associated with the standard output file.
+  @available(swift 5.0)
+  @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+  public static let standardOutput = AnyFileHandle(FileHandle.standardOutput)
 }
