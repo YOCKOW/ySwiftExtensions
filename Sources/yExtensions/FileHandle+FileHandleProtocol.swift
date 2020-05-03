@@ -11,13 +11,6 @@ import yProtocols
 @available(swift 5.0)
 @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
 extension FileHandle: FileHandleProtocol {
-  public func write(string: String, using encoding: String.Encoding, allowLossyConversion: Bool) throws {
-    enum _Error: Error { case dataConversionFailed }
-    guard let data = string.data(using: encoding, allowLossyConversion: allowLossyConversion) else {
-      throw _Error.dataConversionFailed
-    }
-    try self.write(contentsOf: data)
-  }
 }
 
 // Workaround for https://bugs.swift.org/browse/SR-11922

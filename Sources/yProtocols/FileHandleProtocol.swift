@@ -33,6 +33,10 @@ public protocol FileHandleProtocol: class,
   func write(string: String, using encoding: String.Encoding, allowLossyConversion: Bool) throws
 }
 
+public enum FileHandleProtocolError: Error {
+  case dataConversionFailure
+}
+
 @available(swift 5.0)
 @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
 extension FileHandleProtocol {
@@ -69,6 +73,13 @@ extension FileHandleProtocol {
       try target.write(contentsOf: data)
     }
     try self.seek(toOffset: originalOffset)
+  }
+  
+  public func write(string: String, using encoding: String.Encoding, allowLossyConversion: Bool) throws {
+    guard let data = string.data(using: encoding, allowLossyConversion: allowLossyConversion) else {
+      throw FileHandleProtocolError.dataConversionFailure
+    }
+    try self.write(contentsOf: data)
   }
   
   public func write(_ string: String) {
