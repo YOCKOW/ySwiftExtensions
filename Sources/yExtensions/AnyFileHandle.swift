@@ -78,7 +78,11 @@ public final class AnyFileHandle: FileHandleProtocol {
   private let _box: _Box
   
   public init<T>(_ fileHandle: T) where T: FileHandleProtocol {
-    self._box = _SomeType<T>(fileHandle)
+    if case let anyFileHandle as AnyFileHandle = fileHandle {
+      self._box = anyFileHandle._box
+    } else {
+      self._box = _SomeType<T>(fileHandle)
+    }
   }
   
   public var availableData: Data {
