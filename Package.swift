@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-  name: "ySwiftExtensions",
+  name: "yExtensions",
   platforms: [
     .macOS(.v10_15),
     .iOS(.v13),
