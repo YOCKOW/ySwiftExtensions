@@ -29,24 +29,23 @@ extension Data {
     /// Index of view.
     public struct Index: Comparable {
       private var _index: Int
-      private var _relativeRange: Range<Data.RelativeIndex>
+      private var _relativeRange: Range<Int>
       
-      fileprivate init(index:Int) {
+      fileprivate init(index: Int) {
         assert(index >= 0)
         self._index = index
         
-        let length = MemoryLayout<UnsignedIntegerType>.size
-        let lower = Data.RelativeIndex(index * length)
-        let upper = Data.RelativeIndex((index + 1) * length)
+        let size = MemoryLayout<UnsignedIntegerType>.size
+        let lower = index * size
+        let upper = (index + 1) * size
         self._relativeRange = lower..<upper
       }
       
-      fileprivate init(range:Range<Data.Index>) {
+      fileprivate init(relativeBounds range: Range<Data.Index>) {
         assert(range.lowerBound >= 0)
         assert(range.upperBound - range.lowerBound == MemoryLayout<UnsignedIntegerType>.size)
         self._index = range.lowerBound / MemoryLayout<UnsignedIntegerType>.size
-        self._relativeRange =
-          Data.RelativeIndex(range.lowerBound)..<Data.RelativeIndex(range.upperBound)
+        self._relativeRange = range
       }
       
       fileprivate static func +(lhs:Index, rhs:Int) -> Index {
@@ -62,12 +61,12 @@ extension Data {
       }
       
       fileprivate func subdata(for data:Data) -> Data {
-        return data[self._relativeRange]
+        return data[relativeBounds: self._relativeRange]
       }
     }
     
-    private var _endianness: _Endianness
-    private var _data: Data
+    private let _endianness: _Endianness
+    private let _data: Data
 
     fileprivate init?(data:Data, endianness:_Endianness = .init(CFByteOrderGetCurrent())) {
       guard data.count % MemoryLayout<UnsignedIntegerType>.size == 0 else { return nil }
@@ -154,7 +153,7 @@ extension Data.View {
 
   public var endIndex: Data.View<UnsignedIntegerType>.Index {
     let distance = self._data.endIndex - self._data.startIndex
-    return Index(range:distance..<(distance + MemoryLayout<UnsignedIntegerType>.size))
+    return Index(relativeBounds: distance..<(distance + MemoryLayout<UnsignedIntegerType>.size))
   }
   
   public var count: Int {
@@ -190,7 +189,7 @@ extension Data.View {
     var unswapped: UnsignedIntegerType = 0
     Swift.withUnsafeMutableBytes(of:&unswapped) { (pointer:UnsafeMutableRawBufferPointer) -> Void in
       for ii in 0..<data.count {
-        pointer[ii] = data[Data.RelativeIndex(ii)]
+        pointer[ii] = data[relativeIndex: ii]
       }
     }
     
