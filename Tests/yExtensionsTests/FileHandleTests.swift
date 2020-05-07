@@ -39,6 +39,11 @@ final class FileHandleTests: XCTestCase {
     XCTAssertEqual(to2, Data([1,2]))
   }
   
+  func test_objectIdentifier() throws {
+    let fh = try _temporaryFileHandle()
+    XCTAssertEqual(ObjectIdentifier(fh), AnyFileHandle(fh).objectIdentifier)
+  }
+  
   func test_readToByte() throws {
     let fh = try _temporaryFileHandle(contents: Data([0,1,2,3]))
     try fh.seek(toOffset: 1)
