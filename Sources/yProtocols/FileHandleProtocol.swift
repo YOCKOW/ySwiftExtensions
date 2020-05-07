@@ -53,7 +53,7 @@ extension FileHandleProtocol {
       guard let byteData = try self.read(upToCount: 1) else { break }
       if byteData.isEmpty { break }
       result.append(byteData)
-      if byteData[0] == byte { return result }
+      if byteData.first == byte { return result }
     }
     return result.isEmpty ? nil : result
   }
