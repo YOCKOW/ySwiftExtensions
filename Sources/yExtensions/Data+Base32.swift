@@ -113,11 +113,11 @@ extension Data {
     var scalars = String.UnicodeScalarView()
     for ii in 0..<nn {
       let bytes: (UInt8,UInt8,UInt8,UInt8,UInt8) = (
-        self[Data.RelativeIndex(ii * 5)],
-        self[Data.RelativeIndex(ii * 5 + 1)],
-        self[Data.RelativeIndex(ii * 5 + 2)],
-        self[Data.RelativeIndex(ii * 5 + 3)],
-        self[Data.RelativeIndex(ii * 5 + 4)]
+        self[relativeIndex: (ii * 5)],
+        self[relativeIndex: (ii * 5 + 1)],
+        self[relativeIndex: (ii * 5 + 2)],
+        self[relativeIndex: (ii * 5 + 3)],
+        self[relativeIndex: (ii * 5 + 4)]
       )
       
       
@@ -136,10 +136,10 @@ extension Data {
     let mm = self.count % 5
     if mm > 0 {
       let lastBytes: (UInt8,UInt8,UInt8,UInt8,UInt8) = (
-        self[Data.RelativeIndex(nn * 5)],
-        mm > 1 ? self[Data.RelativeIndex(nn * 5 + 1)] : 0,
-        mm > 2 ? self[Data.RelativeIndex(nn * 5 + 2)] : 0,
-        mm > 3 ? self[Data.RelativeIndex(nn * 5 + 3)] : 0,
+        self[relativeIndex: (nn * 5)],
+        mm > 1 ? self[relativeIndex: (nn * 5 + 1)] : 0,
+        mm > 2 ? self[relativeIndex: (nn * 5 + 2)] : 0,
+        mm > 3 ? self[relativeIndex: (nn * 5 + 3)] : 0,
         0
       )
       
@@ -206,14 +206,14 @@ extension Data {
     
     for ii in 0..<nn {
       let bytes: (UInt8,UInt8,UInt8,UInt8,UInt8,UInt8,UInt8,UInt8) = (
-        encodedData[Data.RelativeIndex(ii * 8)],
-        encodedData[Data.RelativeIndex(ii * 8 + 1)],
-        encodedData[Data.RelativeIndex(ii * 8 + 2)],
-        encodedData[Data.RelativeIndex(ii * 8 + 3)],
-        encodedData[Data.RelativeIndex(ii * 8 + 4)],
-        encodedData[Data.RelativeIndex(ii * 8 + 5)],
-        encodedData[Data.RelativeIndex(ii * 8 + 6)],
-        encodedData[Data.RelativeIndex(ii * 8 + 7)]
+        encodedData[relativeIndex: (ii * 8)],
+        encodedData[relativeIndex: (ii * 8 + 1)],
+        encodedData[relativeIndex: (ii * 8 + 2)],
+        encodedData[relativeIndex: (ii * 8 + 3)],
+        encodedData[relativeIndex: (ii * 8 + 4)],
+        encodedData[relativeIndex: (ii * 8 + 5)],
+        encodedData[relativeIndex: (ii * 8 + 6)],
+        encodedData[relativeIndex: (ii * 8 + 7)]
       )
       
       // aaaaa aaabb bbbbb bcccc ccccd ddddd ddeee eeeee
@@ -240,13 +240,13 @@ extension Data {
     
     if mm > 0 {
       let lastBytes: (UInt8,UInt8,UInt8,UInt8,UInt8,UInt8,UInt8,UInt8) = (
-        encodedData[Data.RelativeIndex(nn * 8)],
-        encodedData[Data.RelativeIndex(nn * 8 + 1)],
-        mm >= 4 ? encodedData[Data.RelativeIndex(nn * 8 + 2)] : 0,
-        mm >= 4 ? encodedData[Data.RelativeIndex(nn * 8 + 3)] : 0,
-        mm >= 5 ? encodedData[Data.RelativeIndex(nn * 8 + 4)] : 0,
-        mm >= 7 ? encodedData[Data.RelativeIndex(nn * 8 + 5)] : 0,
-        mm >= 7 ? encodedData[Data.RelativeIndex(nn * 8 + 6)] : 0,
+        encodedData[relativeIndex: (nn * 8)],
+        encodedData[relativeIndex: (nn * 8 + 1)],
+        mm >= 4 ? encodedData[relativeIndex: (nn * 8 + 2)] : 0,
+        mm >= 4 ? encodedData[relativeIndex: (nn * 8 + 3)] : 0,
+        mm >= 5 ? encodedData[relativeIndex: (nn * 8 + 4)] : 0,
+        mm >= 7 ? encodedData[relativeIndex: (nn * 8 + 5)] : 0,
+        mm >= 7 ? encodedData[relativeIndex: (nn * 8 + 6)] : 0,
         0
       )
       

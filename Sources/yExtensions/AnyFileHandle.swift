@@ -18,6 +18,7 @@ public final class AnyFileHandle: FileHandleProtocol {
     }
     
     fileprivate func close() throws { _mustBeOverridden() }
+    fileprivate var objectIdentifier: ObjectIdentifier { _mustBeOverridden() }
     fileprivate func offset() throws -> UInt64 { _mustBeOverridden() }
     fileprivate func readToEnd() throws -> Data? { _mustBeOverridden() }
     fileprivate func read(upToCount count: Int) throws -> Data? { _mustBeOverridden() }
@@ -35,6 +36,10 @@ public final class AnyFileHandle: FileHandleProtocol {
     
     fileprivate override func close() throws {
       try self._base.close()
+    }
+    
+    fileprivate override var objectIdentifier: ObjectIdentifier {
+      return ObjectIdentifier(self._base)
     }
     
     fileprivate override func offset() throws -> UInt64 {
@@ -91,6 +96,11 @@ public final class AnyFileHandle: FileHandleProtocol {
   
   public func close() throws {
     return try self._box.close()
+  }
+  
+  /// Returns an instance of `ObjectIdentifier` that is of the packed file handle.
+  public var objectIdentifier: ObjectIdentifier {
+    return self._box.objectIdentifier
   }
   
   public func offset() throws -> UInt64 {

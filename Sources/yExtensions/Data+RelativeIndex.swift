@@ -9,6 +9,7 @@ import Foundation
 
 extension Data {
   /// Represetnts the distance from `startIndex`.
+  @available(*, deprecated, message: "Use computed properties defined in the extension of `RandomAccessCollection` instead.")
   public struct RelativeIndex: Comparable {
     private var _distance: Data.Index
     
@@ -30,26 +31,32 @@ extension Data {
     }
   }
   
+  @available(*, deprecated, message: "Use computed properties defined in the extension of `RandomAccessCollection` instead.")
   public var relativeStartIndex: RelativeIndex {
     return RelativeIndex(0)
   }
   
+  @available(*, deprecated, message: "Use computed properties defined in the extension of `RandomAccessCollection` instead.")
   public var relativeEndIndex: RelativeIndex {
     return RelativeIndex(self.endIndex - self.startIndex)
   }
   
+  @available(*, deprecated, message: "Use computed properties defined in the extension of `RandomAccessCollection` instead.")
   public func relativeIndex(_ relativeIndex:RelativeIndex, offsetBy distance:Int) -> RelativeIndex {
     return relativeIndex + distance
   }
   
+  @available(*, deprecated, message: "Use computed properties defined in the extension of `RandomAccessCollection` instead.")
   public func relativeIndex(after index:RelativeIndex) -> RelativeIndex {
     return self.relativeIndex(index, offsetBy:1)
   }
   
+  @available(*, deprecated, message: "Use computed properties defined in the extension of `RandomAccessCollection` instead.")
   public func relativeIndex(before index:RelativeIndex) -> RelativeIndex {
     return self.relativeIndex(index, offsetBy:-1)
   }
   
+  @available(*, deprecated, message: "Use computed properties defined in the extension of `RandomAccessCollection` instead.")
   public subscript(_ relativeIndex:RelativeIndex) -> UInt8 {
     get {
       return self[relativeIndex.actualIndex(for:self)]
@@ -59,6 +66,7 @@ extension Data {
     }
   }
   
+  @available(*, deprecated, message: "Use computed properties defined in the extension of `RandomAccessCollection` instead.")
   public subscript(_ relativeBounds:Range<RelativeIndex>) -> Data {
     get {
       let lower = relativeBounds.lowerBound.actualIndex(for:self)

@@ -40,6 +40,7 @@ extension FileHandleTests {
     static let __allTests__FileHandleTests = [
         ("test_dataOutputStream", test_dataOutputStream),
         ("test_fileHandleProtocol", test_fileHandleProtocol),
+        ("test_objectIdentifier", test_objectIdentifier),
         ("test_readToByte", test_readToByte),
         ("test_warn", test_warn),
     ]
