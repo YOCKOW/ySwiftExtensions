@@ -199,7 +199,7 @@ extension DataProtocol {
 
 extension MutableDataProtocol {
   /// Initialize with a Base-32 encoded data.
-  public init?(base32Encoded data: Data, version: Base32Version) {
+  public init?<D>(base32Encoded data: D, version: Base32Version) where D: DataProtocol {
     self.init()
 
     let table = _decodeTables[version]!
