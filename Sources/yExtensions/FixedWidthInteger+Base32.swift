@@ -46,6 +46,7 @@ extension FixedWidthInteger {
     guard size == MemoryLayout<Self>.size else { return nil }
     
     let memory = UnsafeMutablePointer<Self>.allocate(capacity: 1)
+    defer { memory.deallocate() }
     memory.withMemoryRebound(to: UInt8.self, capacity: size) {
       for ii in 0..<size { $0[ii] = decoded[ii] }
     }
