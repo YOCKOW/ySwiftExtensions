@@ -51,7 +51,8 @@ extension NumberTests {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__NumberTests = [
-        ("test_base32", test_base32),
+        ("test_base32_float", test_base32_float),
+        ("test_base32_integer", test_base32_integer),
     ]
 }
 

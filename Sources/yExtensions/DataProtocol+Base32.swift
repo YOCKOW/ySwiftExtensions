@@ -272,20 +272,7 @@ extension MutableDataProtocol {
         remain >= 7 ? encodedData[relativeIndex: (nn * 8 + 6)] : 0,
         0
       )
-      let count: Int = ({
-        switch remain {
-        case 1, 2, 3:
-          return 1
-        case 4:
-          return 2
-        case 5, 6:
-          return 3
-        case 7:
-          return 5
-        default:
-          fatalError("Never reached here.")
-        }
-      })()
+      guard let count = ([2: 1, 4: 2, 5: 3, 7: 4] as [Int: Int])[remain] else { return nil }
       __append(contentsOf: __decode(bytes: lastBytes), upToCount: count)
     }
   }
