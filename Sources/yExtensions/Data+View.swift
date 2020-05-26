@@ -10,21 +10,7 @@ import Foundation
 
 extension Data {
   public struct View<UnsignedIntegerType>
-    where UnsignedIntegerType: UnsignedInteger & FixedWidthInteger
-  {
-    fileprivate enum _Endianness {
-      case bigEndian, littleEndian
-      // Should implement the case like `case middleEndian(ByteOrder)`?
-      fileprivate init(_ cfEndian:CFByteOrder) {
-        if cfEndian == CFByteOrderBigEndian.rawValue {
-          self = .bigEndian
-        } else if cfEndian == CFByteOrderLittleEndian.rawValue {
-          self = .littleEndian
-        } else {
-          fatalError("Unsupported endianness.")
-        }
-      }
-    }
+    where UnsignedIntegerType: UnsignedInteger & FixedWidthInteger {
     
     /// Index of view.
     public struct Index: Comparable {
@@ -65,13 +51,13 @@ extension Data {
       }
     }
     
-    private let _endianness: _Endianness
+    private let _byteOrder: ByteOrder
     private let _data: Data
 
-    fileprivate init?(data:Data, endianness:_Endianness = .init(CFByteOrderGetCurrent())) {
+    fileprivate init?(data: Data, byteOrder: ByteOrder = .current) {
       guard data.count % MemoryLayout<UnsignedIntegerType>.size == 0 else { return nil }
       self._data = data
-      self._endianness = endianness
+      self._byteOrder = byteOrder
     }
   }
 }
@@ -85,14 +71,14 @@ extension Data {
   /// This property may be `nil` if the size of the data is not a multiple of the size of `UInt16`.
   public typealias UInt16BigEndianView = View<UInt16>
   public var uint16BigEndianView: UInt16BigEndianView? {
-    return UInt16BigEndianView(data:self, endianness:.bigEndian)
+    return UInt16BigEndianView(data: self, byteOrder: .bigEndian)
   }
   
   /// A view of a data's contents as a collection of `UInt16` in little endian.
   /// This property may be `nil` if the size of the data is not a multiple of the size of `UInt16`.
   public typealias UInt16LittleEndianView = View<UInt16>
   public var uint16LittleEndianView: UInt16LittleEndianView? {
-    return UInt16LittleEndianView(data:self, endianness:.littleEndian)
+    return UInt16LittleEndianView(data: self, byteOrder: .littleEndian)
   }
   
   /// A view of a data's contents as a collection of `UInt16` in host's endian.
@@ -106,14 +92,14 @@ extension Data {
   /// This property may be `nil` if the size of the data is not a multiple of the size of `UInt32`.
   public typealias UInt32BigEndianView = View<UInt32>
   public var uint32BigEndianView: UInt32BigEndianView? {
-    return UInt32BigEndianView(data:self, endianness:.bigEndian)
+    return UInt32BigEndianView(data: self, byteOrder: .bigEndian)
   }
   
   /// A view of a data's contents as a collection of `UInt32` in little endian.
   /// This property may be `nil` if the size of the data is not a multiple of the size of `UInt32`.
   public typealias UInt32LittleEndianView = View<UInt32>
   public var uint32LittleEndianView: UInt32LittleEndianView? {
-    return UInt32LittleEndianView(data:self, endianness:.littleEndian)
+    return UInt32LittleEndianView(data: self, byteOrder: .littleEndian)
   }
   
   /// A view of a data's contents as a collection of `UInt32` in host's endian.
@@ -127,14 +113,14 @@ extension Data {
   /// This property may be `nil` if the size of the data is not a multiple of the size of `UInt64`.
   public typealias UInt64BigEndianView = View<UInt64>
   public var uint64BigEndianView: UInt64BigEndianView? {
-    return UInt64BigEndianView(data:self, endianness:.bigEndian)
+    return UInt64BigEndianView(data: self, byteOrder: .bigEndian)
   }
   
   /// A view of a data's contents as a collection of `UInt64` in little endian.
   /// This property may be `nil` if the size of the data is not a multiple of the size of `UInt64`.
   public typealias UInt64LittleEndianView = View<UInt64>
   public var uint64LittleEndianView: UInt64LittleEndianView? {
-    return UInt64LittleEndianView(data:self, endianness:.littleEndian)
+    return UInt64LittleEndianView(data: self, byteOrder: .littleEndian)
   }
   
   /// A view of a data's contents as a collection of `UInt64` in host's endian.
@@ -193,9 +179,13 @@ extension Data.View {
       }
     }
     
-    switch self._endianness {
-    case .bigEndian: return UnsignedIntegerType(bigEndian:unswapped)
-    case .littleEndian: return UnsignedIntegerType(littleEndian:unswapped)
+    switch self._byteOrder {
+    case .bigEndian:
+      return UnsignedIntegerType(bigEndian: unswapped)
+    case .littleEndian:
+      return UnsignedIntegerType(littleEndian: unswapped)
+    default:
+      fatalError("Unsupported Byte Order... Never Reached.")
     }
   }
 }

@@ -19,16 +19,16 @@ let subdata = data[0x04..<0x0C]
 
 final class DataTests: XCTestCase {
   func test_base32() {
-    let tests:[Base32Version:(String, StaticString, UInt)] = [
-      .rfc4648:("AQCQMBYIBEFAW", #file, #line),
-      .crockford:("0G2GC1R81450P", #file, #line),
+    let tests: [Base32Version: (String, StaticString, UInt)] = [
+      .rfc4648: ("AQCQMBYIBEFAW", #file, #line),
+      .crockford: ("0G2GC1R81450P", #file, #line),
     ]
     
     for (version, testValue) in tests {
-      XCTAssertEqual(subdata.base32EncodedString(using:version), testValue.0,
-                     "Encoding", file:testValue.1, line:testValue.2)
-      XCTAssertEqual(subdata.map{"\($0)"}, Data(base32Encoded:testValue.0, using:version)?.map{"\($0)"},
-                     "Decoding", file:testValue.1, line:testValue.2)
+      XCTAssertEqual(subdata.base32EncodedString(using: version), testValue.0,
+                     "Encoding", file: testValue.1, line: testValue.2)
+      XCTAssertEqual(subdata, Data(base32Encoded: testValue.0, version: version),
+                     "Decoding", file: testValue.1, line: testValue.2)
     }
   }
   

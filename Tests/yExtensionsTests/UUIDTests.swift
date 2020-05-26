@@ -18,7 +18,7 @@ final class UUIDTests: XCTestCase {
     
     for test in tests {
       XCTAssertEqual(UUID(uuidString:test.uuidString),
-                     UUID(base32Encoded:test.base32EncodedString, using:.rfc4648),
+                     UUID(base32Encoded: test.base32EncodedString, version: .rfc4648),
                      file:test.file, line:test.line)
     }
   }
