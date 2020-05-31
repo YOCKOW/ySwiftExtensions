@@ -62,7 +62,7 @@ extension FixedWidthInteger {
   }
   
   /// Initialize with a Base-32 encoded string.
-  public init?(base32Encoded string: String, version: Base32Version, byteOrder: ByteOrder) {
+  public init?<S>(base32Encoded string: S, version: Base32Version, byteOrder: ByteOrder) where S: StringProtocol {
     guard let data = string.data(using: .utf8) else { return nil }
     self.init(base32Encoded: data, version: version, byteOrder: byteOrder)
   }

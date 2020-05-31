@@ -38,7 +38,7 @@ extension UUID {
   }
   
   /// Initialize with a Base32 encoded string.
-  public init?(base32Encoded string: String, version: Base32Version) {
+  public init?<S>(base32Encoded string: S, version: Base32Version) where S: StringProtocol {
     guard let uuid = string.data(using: .utf8).flatMap({ UUID(base32Encoded: $0, version: version) }) else {
       return nil
     }
