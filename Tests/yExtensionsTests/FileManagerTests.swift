@@ -15,9 +15,9 @@ final class FileManagerTests: XCTestCase {
     let baseDirURL = URL.temporaryDirectory.appendingPathComponent("ySwiftExtensionsFileManagerTests",
                                                                    isDirectory: true)
     
-    let nn = 10
+    let nn = 50
     let components: [String] = (0..<nn).reduce(into: []) { result, _ in
-      result.append(UUID().base32EncodedString())
+      result.append(String(UUID().base32EncodedString().prefix(7)))
     }
     DispatchQueue.concurrentPerform(iterations: nn) {
       let dirURL = baseDirURL.appendingPathComponent(components[0..<(nn - $0)].joined(separator: "/"))
