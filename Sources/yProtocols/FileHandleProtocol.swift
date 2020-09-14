@@ -75,7 +75,9 @@ extension FileHandleProtocol {
     try self.seek(toOffset: originalOffset)
   }
   
-  public func write(string: String, using encoding: String.Encoding, allowLossyConversion: Bool) throws {
+  public func write(string: String,
+                    using encoding: String.Encoding = .utf8,
+                    allowLossyConversion: Bool = false) throws {
     guard let data = string.data(using: encoding, allowLossyConversion: allowLossyConversion) else {
       throw FileHandleProtocolError.dataConversionFailure
     }
