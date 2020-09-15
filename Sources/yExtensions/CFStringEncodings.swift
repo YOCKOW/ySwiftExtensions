@@ -4,18 +4,18 @@
 //# The material(s) to generate this file was/were obtained from below:
 //
 // URL: https://raw.githubusercontent.com/apple/swift-corelibs-foundation/master/CoreFoundation/String.subproj/CFString.h
-// ETag: W/"c668332603c5d63332902a9d6a4ae9462082610d5487db4731fcef267cd155da"
+// ETag: W/"83e5d78bb3bb36d5a6d60f112e9fe1028f840b3496fa21b1f34841345fc8f74f"
 //
 // URL: https://raw.githubusercontent.com/apple/swift-corelibs-foundation/master/CoreFoundation/String.subproj/CFStringEncodingExt.h
-// ETag: W/"4861c906c15ec6c3f22c071e5ede5b74c8f59fff43cd11f7fa6d525c5117cb54"
+// ETag: W/"4ba9e6ff74a97d02ff591804522d7648b0f0b19040d689365c7fbed4b1ad0ff3"
 
 import CoreFoundation
 
 /*
   CFString.h
-  Copyright (c) 1998-2018, Apple Inc. and the Swift project authors
+  Copyright (c) 1998-2019, Apple Inc. and the Swift project authors
   
-  Portions Copyright (c) 2014-2018, Apple Inc. and the Swift project authors
+  Portions Copyright (c) 2014-2019, Apple Inc. and the Swift project authors
   Licensed under Apache License v2.0 with Runtime Library Exception
   See http://swift.org/LICENSE.txt for license information
   See http://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
@@ -40,9 +40,9 @@ extension CFString.Encoding {
 
 /*
   CFStringEncodingExt.h
-  Copyright (c) 1998-2018, Apple Inc. and the Swift project authors
+  Copyright (c) 1998-2019, Apple Inc. and the Swift project authors
   
-  Portions Copyright (c) 2014-2018, Apple Inc. and the Swift project authors
+  Portions Copyright (c) 2014-2019, Apple Inc. and the Swift project authors
   Licensed under Apache License v2.0 with Runtime Library Exception
   See http://swift.org/LICENSE.txt for license information
   See http://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
