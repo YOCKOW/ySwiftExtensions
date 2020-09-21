@@ -30,26 +30,20 @@ extension CFString.Encoding: Equatable {
 
 extension CFString.Encoding {
   /// Initialize with `CFStringBuiltInEncodings`
-  ///
-  /// Note: `CFStringBuiltInEncodings` is defined as Swift's enum on Darwin, howerver,
-  ///       it is an alias of `UInt32` on Linux.
-  public init(_ encoding:CFStringBuiltInEncodings) {
-    #if os(macOS) || os(iOS) || os(watchOS) || os(tvOS)
-    self.init(rawValue:CFStringEncoding(encoding.rawValue))
+  public init(_ encoding: CFStringBuiltInEncodings) {
+    #if canImport(Darwin) || swift(>=5.3)
+    self.init(rawValue: CFStringEncoding(encoding.rawValue))
     #else
-    self.init(rawValue:CFStringEncoding(encoding))
+    self.init(rawValue: CFStringEncoding(encoding))
     #endif
   }
   
   /// Initialize with `CFStringEncodings`
-  ///
-  /// Note: `CFStringEncodings` is defined as Swift's enum on Darwin, howerver,
-  ///       it is an alias of `Int` on Linux.
-  public init(_ encoding:CFStringEncodings) {
-    #if os(macOS) || os(iOS) || os(watchOS) || os(tvOS)
-    self.init(rawValue:CFStringEncoding(encoding.rawValue))
+  public init(_ encoding: CFStringEncodings) {
+    #if canImport(Darwin) || swift(>=5.3)
+    self.init(rawValue: CFStringEncoding(encoding.rawValue))
     #else
-    self.init(rawValue:CFStringEncoding(encoding))
+    self.init(rawValue: CFStringEncoding(encoding))
     #endif
   }
   
