@@ -13,7 +13,7 @@ import Foundation
 
 final class CFStringEncodingTests: XCTestCase {
   func test_initialization() {
-    #if os(macOS) || os(iOS) || os(watchOS) || os(tvOS)
+    #if canImport(Darwin) || swift(>=5.3)
     let utf8Value: CFStringBuiltInEncodings = CFStringBuiltInEncodings.UTF8
     #else
     let utf8Value: CFStringBuiltInEncodings = CFStringBuiltInEncodings(kCFStringEncodingUTF8)
