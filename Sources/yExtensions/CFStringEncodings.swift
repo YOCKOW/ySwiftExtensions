@@ -3,10 +3,10 @@
 //# Please see documents in this project to learn how to regenerate.
 //# The material(s) to generate this file was/were obtained from below:
 //
-// URL: https://raw.githubusercontent.com/apple/swift-corelibs-foundation/master/CoreFoundation/String.subproj/CFString.h
+// URL: https://raw.githubusercontent.com/apple/swift-corelibs-foundation/main/CoreFoundation/String.subproj/CFString.h
 // ETag: W/"83e5d78bb3bb36d5a6d60f112e9fe1028f840b3496fa21b1f34841345fc8f74f"
 //
-// URL: https://raw.githubusercontent.com/apple/swift-corelibs-foundation/master/CoreFoundation/String.subproj/CFStringEncodingExt.h
+// URL: https://raw.githubusercontent.com/apple/swift-corelibs-foundation/main/CoreFoundation/String.subproj/CFStringEncodingExt.h
 // ETag: W/"4ba9e6ff74a97d02ff591804522d7648b0f0b19040d689365c7fbed4b1ad0ff3"
 
 import CoreFoundation

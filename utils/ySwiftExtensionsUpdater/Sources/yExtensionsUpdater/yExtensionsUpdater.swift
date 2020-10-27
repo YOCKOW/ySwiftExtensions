@@ -62,8 +62,8 @@ public final class yExtensionsUpdaterDelegate: CodeUpdaterDelegate {
   
   public var sourceURLs: Array<URL> {
     return [
-      "https://raw.githubusercontent.com/apple/swift-corelibs-foundation/master/CoreFoundation/String.subproj/CFString.h",
-      "https://raw.githubusercontent.com/apple/swift-corelibs-foundation/master/CoreFoundation/String.subproj/CFStringEncodingExt.h",
+      "https://raw.githubusercontent.com/apple/swift-corelibs-foundation/main/CoreFoundation/String.subproj/CFString.h",
+      "https://raw.githubusercontent.com/apple/swift-corelibs-foundation/main/CoreFoundation/String.subproj/CFStringEncodingExt.h",
     ].map { URL(string: $0)! }
   }
   
