@@ -6,7 +6,7 @@
  ************************************************************************************************ */
  
 import Foundation
-import yProtocols
+@_exported import yProtocols
 
 /// A type-erasure for `FileHandleProtocol` or `FileHandle`.
 @available(swift 5.0)

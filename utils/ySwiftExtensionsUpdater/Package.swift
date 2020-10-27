@@ -19,7 +19,7 @@ let package = Package(
   dependencies: [
     // Dependencies declare other packages that this package depends on.
     .package(url: "https://github.com/YOCKOW/SwiftStringComposition.git", from: "2.0.0"),
-    .package(url: "https://github.com/YOCKOW/ySwiftCodeUpdater.git", from: "2.0.0"),
+    .package(url: "https://github.com/YOCKOW/ySwiftCodeUpdater.git", from: "2.0.1"),
     .package(url: "https://github.com/YOCKOW/ySwiftExtensions.git", from: "1.5.2"),
   ],
   targets: [
