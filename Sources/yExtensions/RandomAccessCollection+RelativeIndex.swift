@@ -4,16 +4,40 @@
      Licensed under MIT License.
      See "LICENSE.txt" for more information.
  ************************************************************************************************ */
- 
+
+@_exported import Ranges
+
 extension RandomAccessCollection {
   @inlinable
   public func index(forRelativeIndex relativeIndex: Int) -> Self.Index {
     return self.index(self.startIndex, offsetBy: relativeIndex)
   }
-  
-  @inlinable
-  internal func _range(forRelativeBounds relativeBounds: Range<Int>) -> Range<Self.Index> {
-    return self.index(forRelativeIndex: relativeBounds.lowerBound)..<self.index(forRelativeIndex: relativeBounds.upperBound)
+
+  fileprivate func _absoluteRange<R>(forRelativeBounds relativeBounds: R) -> Range<Self.Index> where R: GeneralizedRange, R.Bound == Int {
+    guard let bounds = relativeBounds.bounds else {
+      return startIndex..<startIndex
+    }
+    let lower: Self.Index = ({
+      switch $0 {
+      case .unbounded:
+        return startIndex
+      case .included(let relativeLower):
+        return index(forRelativeIndex: relativeLower)
+      case .excluded(let relativeLower):
+        precondition(relativeLower < Int.max, "Can't express the lower bound.")
+        return index(forRelativeIndex: relativeLower + 1)
+      }
+    })(bounds.lower)
+
+    switch bounds.upper {
+    case .unbounded:
+      return lower..<endIndex
+    case .included(let relativeUpper):
+      precondition(relativeUpper < Int.max, "Can't express the upper bound.")
+      return lower..<index(forRelativeIndex: relativeUpper + 1)
+    case .excluded(let relativeUpper):
+      return lower..<index(forRelativeIndex: relativeUpper)
+    }
   }
   
   /// Returns the distance from `startIndex` to `absoluteIndex`.
@@ -68,10 +92,9 @@ extension RandomAccessCollection {
   public subscript(relativeIndex relativeIndex: Int) -> Self.Element {
     return self[self.index(forRelativeIndex: relativeIndex)]
   }
-  
-  @inlinable
-  public subscript(relativeBounds relativeBounds: Range<Int>) -> Self.SubSequence {
-    return self[_range(forRelativeBounds: relativeBounds)]
+
+  public subscript<R>(relativeBounds relativeBounds: R) -> Self.SubSequence where R: GeneralizedRange, R.Bound == Int {
+    return self[_absoluteRange(forRelativeBounds: relativeBounds)]
   }
 }
 
@@ -87,16 +110,16 @@ extension RandomAccessCollection where Self: RangeReplaceableCollection {
   public mutating func remove(atRelativeIndex relativeIndex: Int) -> Self.Element {
     return self.remove(at: self.index(forRelativeIndex: relativeIndex))
   }
-  
-  @inlinable
-  public mutating func removeSubrange(ofRelativeBounds relativeBounds: Range<Int>) {
-    self.removeSubrange(_range(forRelativeBounds: relativeBounds))
+
+  public mutating func removeSubrange<R>(ofRelativeBounds relativeBounds: R) where R: GeneralizedRange, R.Bound == Int {
+    self.removeSubrange(_absoluteRange(forRelativeBounds: relativeBounds))
   }
-  
-  @inlinable
-  public mutating func replaceSubrange<C>(ofRelativeBounds relativeBounds: Range<Int>,
-                                          with newElements: C) where C: Collection, Self.Element == C.Element {
-    self.replaceSubrange(_range(forRelativeBounds: relativeBounds), with: newElements)
+
+  public mutating func replaceSubrange<R, C>(
+    ofRelativeBounds relativeBounds: R,
+    with newElements: C
+  ) where R: GeneralizedRange, R.Bound == Int, C: Collection, Self.Element == C.Element {
+    self.replaceSubrange(_absoluteRange(forRelativeBounds: relativeBounds), with: newElements)
   }
 }
 
@@ -110,14 +133,13 @@ extension RandomAccessCollection where Self: MutableCollection {
       self[self.index(forRelativeIndex: relativeIndex)] = newValue
     }
   }
-  
-  @inlinable
-  public subscript(relativeBounds relativeBounds: Range<Int>) -> Self.SubSequence {
+
+  public subscript<R>(relativeBounds relativeBounds: R) -> Self.SubSequence where R: GeneralizedRange, R.Bound == Int {
     get {
-      return self[_range(forRelativeBounds: relativeBounds)]
+      return self[_absoluteRange(forRelativeBounds: relativeBounds)]
     }
     set {
-      self[_range(forRelativeBounds: relativeBounds)] = newValue
+      self[_absoluteRange(forRelativeBounds: relativeBounds)] = newValue
     }
   }
 }

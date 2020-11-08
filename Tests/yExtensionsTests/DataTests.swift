@@ -67,7 +67,14 @@ final class DataTests: XCTestCase {
   
   func test_relativeIndex() {
     XCTAssertEqual(subdata[subdata.startIndex], subdata[relativeIndex: 0])
+    XCTAssertEqual(subdata, subdata[relativeBounds: 0...7])
     XCTAssertEqual(subdata, subdata[relativeBounds: 0..<8])
+    XCTAssertEqual(subdata, subdata[relativeBounds: 0...])
+    XCTAssertEqual(subdata, subdata[relativeBounds: (-1)<...7])
+    XCTAssertEqual(subdata, subdata[relativeBounds: (-1)<..<8])
+    XCTAssertEqual(subdata, subdata[relativeBounds: (-1)<..])
+    XCTAssertEqual(subdata, subdata[relativeBounds: ...7])
+    XCTAssertEqual(subdata, subdata[relativeBounds: ..<8])
   }
   
   func test_view() {
