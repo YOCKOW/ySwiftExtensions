@@ -139,7 +139,7 @@ extension DataProtocol {
       var insertRawCRLF: Bool = false
       
       if options.contains(.regardAsBinary) {
-        requireEncoding = __raw(byte)
+        requireEncoding = !__raw(byte)
       } else {
         if !__raw(byte) && byte != CR && byte != LF && byte != SP && byte != TAB {
           requireEncoding = true

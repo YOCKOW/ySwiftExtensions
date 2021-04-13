@@ -45,11 +45,12 @@ final class DataTests: XCTestCase {
     func __assert(
       _ string: String,
       quotedPrintableString: String,
+      encodingOptions: Data.QuotedPrintableEncodingOptions = .default,
       file: StaticString = #filePath,
       line: UInt = #line
     ) {
       XCTAssertEqual(
-        Data(string.utf8).quotedPrintableEncodedString(),
+        Data(string.utf8).quotedPrintableEncodedString(options: encodingOptions),
         quotedPrintableString,
         "Failed to encode: \(string)",
         file: file,
@@ -82,6 +83,20 @@ final class DataTests: XCTestCase {
       !=E3=81=82=E3=81=84=E3=81=86=E3=81=88=E3=81=8A=E3=81=8B=E3=81=8D=E3=81=8F=\(CRLF)\
       =E3=81=91=E3=81=93
       """
+    )
+
+    // Check whether or not https://github.com/YOCKOW/ySwiftExtensions/issues/45 is fixed.
+    __assert(
+      """
+      !あいうえおかきくけこ
+      さしすせそたちつてと?
+      """,
+      quotedPrintableString: """
+      !=E3=81=82=E3=81=84=E3=81=86=E3=81=88=E3=81=8A=E3=81=8B=E3=81=8D=E3=81=8F=\(CRLF)\
+      =E3=81=91=E3=81=93=0A=E3=81=95=E3=81=97=E3=81=99=E3=81=9B=E3=81=9D=E3=81=9F=\(CRLF)\
+      =E3=81=A1=E3=81=A4=E3=81=A6=E3=81=A8?
+      """,
+      encodingOptions: .regardAsBinary
     )
   }
   
