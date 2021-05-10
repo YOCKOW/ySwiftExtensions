@@ -18,7 +18,9 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-          - macOS-latest
+          # Disable macOS until Big Sur is available.
+          # https://github.com/actions/virtual-environments/issues/2486
+          # - macOS-latest
         swift-compat-ver:
           - '5'
           # - '4.2'
