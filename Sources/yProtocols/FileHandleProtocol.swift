@@ -1,6 +1,6 @@
 /* *************************************************************************************************
  FileHandleProtocol.swift
-   © 2020 YOCKOW.
+   © 2020-2021 YOCKOW.
      Licensed under MIT License.
      See "LICENSE.txt" for more information.
  ************************************************************************************************ */
@@ -14,7 +14,7 @@ import Foundation
 ///   due to [SR-11926](https://bugs.swift.org/browse/SR-11926).
 @available(swift 5.0)
 @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
-public protocol FileHandleProtocol: class,
+public protocol FileHandleProtocol: AnyObject,
                                     DataOutputStream,
                                     DataOutputStreamable,
                                     TextOutputStream {
