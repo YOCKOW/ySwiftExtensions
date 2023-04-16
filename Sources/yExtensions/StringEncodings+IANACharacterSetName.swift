@@ -1,11 +1,12 @@
 /* *************************************************************************************************
  StringEncodings+IANACharacterSetName.swift
-   © 2018 YOCKOW.
+   © 2018,2023 YOCKOW.
      Licensed under MIT License.
      See "LICENSE.txt" for more information.
  ************************************************************************************************ */
 
 import CoreFoundation
+import Foundation
 
 extension String.Encoding {
   /// Initialize with `CFString.Encoding`
