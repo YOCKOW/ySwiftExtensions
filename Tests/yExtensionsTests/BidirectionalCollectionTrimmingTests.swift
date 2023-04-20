@@ -9,20 +9,19 @@ import Foundation
 import XCTest
 @testable import yExtensions
 
-final class KeyPathTests: XCTestCase {
-  func test_asPredicate() {
-    struct S: ExpressibleByBooleanLiteral, Equatable {
-      typealias BooleanLiteralType = Bool
-      let value: Bool
-      var isTrue: Bool { value }
-      var isFalse: Bool { !value }
-      init(booleanLiteral value: Bool) { self.value = value }
-    }
+final class BidirectionalCollectionTrimmingTests: XCTestCase {
+  func test_array() {
+    let array = [0, 1, 2, 3, 4, 5, 4, 3, 2, 1]
+    XCTAssertEqual(array.trimming(where: { $0 < 3 }), [3, 4, 5, 4, 3])
+  }
 
-    let array: [S] = [true, false, false, true, false, true, true, true]
-    XCTAssertEqual(array.filter(\.isTrue || \.isFalse), array)
-    XCTAssertTrue(array.filter(\.isTrue && \.isFalse).isEmpty)
-    XCTAssertEqual(array.trimming(where: \.isTrue && \.isTrue), [false, false, true, false])
-    XCTAssertEqual(array.trimming(where: \.isFalse || \.isFalse), array[...])
+  func test_stringTrimmingCharacters() {
+    let string = "ABCabcABC"
+    XCTAssertEqual(string.trimmingCharacters(where: { $0.isUppercase }), "abc")
+  }
+
+  func test_stringTrimmingUnicodeScalars() {
+    let string = "\n\nsome line\n\n"
+    XCTAssertEqual(string.trimmingUnicodeScalars(where: \.isNewline), "some line")
   }
 }
