@@ -1,5 +1,5 @@
 /* *************************************************************************************************
- KeyPathTests.swift
+ BidirectionalCollectionTrimmingTests.swift
    © 2023 YOCKOW.
      Licensed under MIT License.
      See "LICENSE.txt" for more information.
