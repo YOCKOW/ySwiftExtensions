@@ -3,6 +3,44 @@
 
 import PackageDescription
 
+// It is impossible to write `#if os(macOS<13.0)`, so...
+
+var targets: [Target] = [
+  .target(
+    name: "yExtensions",
+    dependencies: [
+      "SwiftRanges",
+      "SwiftUnicodeSupplement",
+      "yProtocols"
+    ]
+  ),
+  .target(name: "yProtocols", dependencies: []),
+  .target(name: "_yExtensionsTests_support", dependencies: []),
+  .testTarget(
+    name: "yExtensionsTests",
+    dependencies: [
+      "SwiftUnicodeSupplement",
+      "yExtensions",
+      "yProtocols",
+      "_yExtensionsTests_support"
+    ]
+  ),
+]
+
+let urlTemporaryDirectoryAvailable: Bool = ({
+  #if !canImport(Darwin) && swift(<99.99)
+  return false
+  #else
+  if #available(iOS 16.0, macOS 13.0, tvOS 16.0, watchOS 9.0, *) {
+    return true
+  }
+  return false
+  #endif
+})()
+if !urlTemporaryDirectoryAvailable {
+  targets.append(.target(name: "URLTemporaryDirectory", dependencies:[]))
+}
+
 let package = Package(
   name: "yExtensions",
   platforms: [
@@ -20,29 +58,7 @@ let package = Package(
     .package(url: "https://github.com/YOCKOW/SwiftRanges.git", from: "3.1.0"),
     .package(url: "https://github.com/YOCKOW/SwiftUnicodeSupplement.git", from: "1.3.0"),
   ],
-  targets: [
-    // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-    // Targets can depend on other targets in this package, and on products in packages which this package depends on.
-    .target(
-      name: "yExtensions",
-      dependencies: [
-        "SwiftRanges",
-        "SwiftUnicodeSupplement",
-        "yProtocols"
-      ]
-    ),
-    .target(name: "yProtocols", dependencies: []),
-    .target(name: "_yExtensionsTests_support", dependencies: []),
-    .testTarget(
-      name: "yExtensionsTests",
-      dependencies: [
-        "SwiftUnicodeSupplement",
-        "yExtensions",
-        "yProtocols",
-        "_yExtensionsTests_support"
-      ]
-    ),
-  ],
+  targets: targets,
   swiftLanguageVersions: [.v5]
 )
 
