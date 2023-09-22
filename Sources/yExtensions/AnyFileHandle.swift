@@ -70,7 +70,7 @@ public final class AnyFileHandle: FileHandleProtocol {
       try self._base.truncate(atOffset: offset)
     }
     
-    fileprivate override func write<T: DataProtocol>(contentsOf data: T) throws {
+    fileprivate override func write<D: DataProtocol>(contentsOf data: D) throws {
       try self._base.write(contentsOf: data)
     }
     
