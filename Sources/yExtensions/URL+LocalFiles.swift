@@ -10,6 +10,10 @@ import Foundation
 extension URL {
   /// URL for the temporary directory.
   /// On Darwin, it is for the current user.
+  @available(macOS, obsoleted: 13.0, message: "Use vendor extension.")
+  @available(iOS, obsoleted: 16.0, message: "Use vendor extension.")
+  @available(tvOS, obsoleted: 16.0, message: "Use vendor extension.")
+  @available(watchOS, obsoleted: 9.0, message: "Use vendor extension.")
   public static var temporaryDirectory: URL {
     #if swift(>=4.1) || canImport(ObjectiveC)
     if #available(iOS 10.0, macOS 10.12, tvOS 10.0, watchOS 3.0, *) {
