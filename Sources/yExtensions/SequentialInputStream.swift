@@ -84,11 +84,11 @@ public class SequentialInputStream: InputStream {
   }
 
   public override func schedule(in aRunLoop: RunLoop, forMode mode: RunLoop.Mode) {
-    fatalError("Unimplemented")
+    _streams.forEach({ $0.schedule(in: aRunLoop, forMode: mode) })
   }
 
   public override func remove(from aRunLoop: RunLoop, forMode mode: RunLoop.Mode) {
-    fatalError("Unimplemented")
+    _streams.forEach({ $0.remove(from: aRunLoop, forMode: mode) })
   }
 
   public override func getBuffer(_ buffer: UnsafeMutablePointer<UnsafeMutablePointer<UInt8>?>, length len: UnsafeMutablePointer<Int>) -> Bool {
