@@ -24,7 +24,13 @@ public class SequentialInputStream: InputStream {
   public init<S>(_ streams: S) where S: Sequence, S.Element: InputStream {
     // https://github.com/apple/swift/issues/71170
     self._streams = Array(streams)
+
+    // https://github.com/YOCKOW/ySwiftExtensions/issues/57
+    #if canImport(ObjectiveC)
     super.init()
+    #else
+    super.init(data: Data())
+    #endif
   }
 
   private var _status: Stream.Status = .notOpen
@@ -47,11 +53,18 @@ public class SequentialInputStream: InputStream {
     }
   }
 
-  private var _properties: [Stream.PropertyKey: Any] = [:]
-  public override func property(forKey key: Stream.PropertyKey) -> Any? {
+  // A workaround for https://github.com/YOCKOW/ySwiftExtensions/issues/57
+  #if canImport(ObjectiveC)
+  public typealias Property = Any
+  #else
+  public typealias Property = AnyObject
+  #endif
+
+  private var _properties: [Stream.PropertyKey: Property] = [:]
+  public override func property(forKey key: Stream.PropertyKey) -> Property? {
     return _properties[key]
   }
-  public override func setProperty(_ property: Any?, forKey key: Stream.PropertyKey) -> Bool {
+  public override func setProperty(_ property: Property?, forKey key: Stream.PropertyKey) -> Bool {
     _properties[key] = property
     return true
   }
