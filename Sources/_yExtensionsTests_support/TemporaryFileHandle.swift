@@ -32,7 +32,7 @@ private func _register(url: URL, fileHandle: FileHandle) {
   _fileHandles.append((url: url, fileHandle: fileHandle))
 }
 
-public func _temporaryFileHandle(contents: Data? = nil) throws -> FileHandle {
+public func _temporaryFileURLAndHandle(contents: Data? = nil) throws -> (url: URL, fileHandle: FileHandle) {
   func _tmp() -> URL {
     if #available(macOS 10.12, iOS 10.0, watchOS 3.0, tvOS 10.0, *) {
       return FileManager.default.temporaryDirectory
@@ -40,10 +40,14 @@ public func _temporaryFileHandle(contents: Data? = nil) throws -> FileHandle {
       return URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
     }
   }
-  
+
   let url = _tmp().appendingPathComponent(UUID().uuidString)
   FileManager.default.createFile(atPath: url.path, contents: contents)
   let fh = try FileHandle(forUpdating: url)
   _register(url: url, fileHandle: fh)
-  return fh
+  return (url, fh)
+}
+
+public func _temporaryFileHandle(contents: Data? = nil) throws -> FileHandle {
+  return try _temporaryFileURLAndHandle(contents: contents).fileHandle
 }
