@@ -1,6 +1,6 @@
 /* *************************************************************************************************
  AnyFileHandle.swift
-   © 2020 YOCKOW.
+   © 2020,2024 YOCKOW.
      Licensed under MIT License.
      See "LICENSE.txt" for more information.
  ************************************************************************************************ */
@@ -11,8 +11,8 @@ import Foundation
 /// A type-erasure for `FileHandleProtocol` or `FileHandle`.
 @available(swift 5.0)
 @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
-public final class AnyFileHandle: FileHandleProtocol {
-  private class _Box {
+public final class AnyFileHandle: FileHandleProtocol, Sendable {
+  private class _Box: @unchecked Sendable {
     private func _mustBeOverridden(function: StaticString = #function, file: StaticString = #file, line: UInt = #line) -> Never {
       fatalError("\(function) must be overridden.", file: file, line: line)
     }
@@ -30,7 +30,7 @@ public final class AnyFileHandle: FileHandleProtocol {
     fileprivate func write(string: String, using encoding: String.Encoding, allowLossyConversion: Bool) throws { _mustBeOverridden() }
   }
   
-  private class _SomeType<T>: _Box where T: FileHandleProtocol {
+  private final class _SomeType<T>: _Box, @unchecked Sendable where T: FileHandleProtocol {
     private var _base: T
     fileprivate init(_ base: T) { self._base = base }
     

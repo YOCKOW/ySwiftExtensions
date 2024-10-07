@@ -1,6 +1,6 @@
 /* *************************************************************************************************
  Dictionary+KeyValueParser.swift
-   © 2017-2019 YOCKOW.
+   © 2017-2019,2024 YOCKOW.
      Licensed under MIT License.
      See "LICENSE.txt" for more information.
  ************************************************************************************************ */
@@ -11,7 +11,7 @@ public enum DictionaryParseError: Error {
   
 }
 
-private var _quotationMarks: [String:String] = [
+private let _quotationMarks: [String:String] = [
   "\"":"\"",
   "'":"'",
   "(":")",

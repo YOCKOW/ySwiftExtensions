@@ -1,6 +1,6 @@
 /* *************************************************************************************************
  DataProtocol+QuotedPrintable.swift
-   © 2017-2018, 2021 YOCKOW.
+   © 2017-2018,2021,2024 YOCKOW.
      Licensed under MIT License.
      See "LICENSE.txt" for more information.
  ************************************************************************************************ */
@@ -32,14 +32,14 @@ extension UInt8 {
 
 extension Data {
   /// Options to be used when decoding quoted-printable data.
-  public struct QuotedPrintableDecodingOptions: OptionSet {
+  public struct QuotedPrintableDecodingOptions: OptionSet, Sendable {
     public let rawValue: Int
     public init(rawValue: Int) { self.rawValue = rawValue }
     public static let `default`: QuotedPrintableDecodingOptions = []
   }
 
   /// Options to be used when encoding quoted-printable data.
-  public struct QuotedPrintableEncodingOptions: OptionSet {
+  public struct QuotedPrintableEncodingOptions: OptionSet, Sendable {
     public let rawValue: Int
     public init(rawValue: Int) { self.rawValue = rawValue }
     public static let regardAsBinary = QuotedPrintableEncodingOptions(rawValue:(1 << 0))

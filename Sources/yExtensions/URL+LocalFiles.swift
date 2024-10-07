@@ -1,12 +1,13 @@
 /* *************************************************************************************************
  URL+LocalFiles.swift
-   © 2020 YOCKOW.
+   © 2020,2024 YOCKOW.
      Licensed under MIT License.
      See "LICENSE.txt" for more information.
  ************************************************************************************************ */
  
 import Foundation
 
+#if compiler(<6.0)
 extension URL {
   /// URL for the temporary directory.
   /// On Darwin, it is for the current user.
@@ -23,6 +24,7 @@ extension URL {
     return URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
   }
 }
+#endif
 
 extension FileManager {
   /// Returns whether file exists at `url` and is directory.

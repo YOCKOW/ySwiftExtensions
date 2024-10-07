@@ -1,6 +1,6 @@
 /***************************************************************************************************
  CFStringEncoding.swift
-   © 2017-2018 YOCKOW.
+   © 2017-2018,2024 YOCKOW.
      Licensed under MIT License.
      See "LICENSE.txt" for more information.
  **************************************************************************************************/
@@ -13,7 +13,7 @@ import CoreFoundation
 import Foundation
 
 extension CFString {
-  public struct Encoding: RawRepresentable {
+  public struct Encoding: RawRepresentable, Sendable {
     public typealias RawValue = CFStringEncoding
     public let rawValue: CFStringEncoding // aka UInt32
     public init(rawValue: CFStringEncoding) { self.rawValue = rawValue }
