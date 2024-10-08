@@ -7,7 +7,7 @@
  
 import Foundation
 
-#if compiler(<6.0)
+#if compiler(<6.0) || canImport(ObjectiveC)
 extension URL {
   /// URL for the temporary directory.
   /// On Darwin, it is for the current user.
