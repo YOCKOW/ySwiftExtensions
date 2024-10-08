@@ -1,6 +1,6 @@
 /* *************************************************************************************************
  ByteOrder.swift
-   © 2020 YOCKOW.
+   © 2020,2024 YOCKOW.
      Licensed under MIT License.
      See "LICENSE.txt" for more information.
  ************************************************************************************************ */
@@ -8,7 +8,7 @@
 import CoreFoundation
 
 /// Represents "endianness".
-public enum ByteOrder {
+public enum ByteOrder: Sendable {
   case unknown
   case littleEndian
   case bigEndian

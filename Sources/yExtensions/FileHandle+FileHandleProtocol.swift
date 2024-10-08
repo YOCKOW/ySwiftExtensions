@@ -1,6 +1,6 @@
 /* *************************************************************************************************
  FileHandle+FileHandleProtocol.swift
-   © 2017-2020 YOCKOW.
+   © 2017-2020,2024 YOCKOW.
      Licensed under MIT License.
      See "LICENSE.txt" for more information.
  ************************************************************************************************ */
@@ -10,8 +10,7 @@ import Foundation
 
 @available(swift 5.0)
 @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
-extension FileHandle: FileHandleProtocol {
-}
+extension Foundation.FileHandle: yProtocols.FileHandleProtocol {}
 
 // Workaround for https://bugs.swift.org/browse/SR-11922
 #if !canImport(ObjectiveC) && swift(<5.3)

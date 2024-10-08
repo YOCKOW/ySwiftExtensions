@@ -1,6 +1,6 @@
 /* *************************************************************************************************
  DataProtocol+Base32.swift
-   © 2019-2020 YOCKOW.
+   © 2019-2020,2024 YOCKOW.
      Licensed under MIT License.
      See "LICENSE.txt" for more information.
  ************************************************************************************************ */
@@ -9,7 +9,7 @@ import Foundation
 
 /// Representation for versions of Base32.
 /// reference: https://en.wikipedia.org/wiki/Base32
-public enum Base32Version {
+public enum Base32Version: Sendable {
   /// Defined in [RFC 4648](https://tools.ietf.org/html/rfc4648).
   case rfc4648
   

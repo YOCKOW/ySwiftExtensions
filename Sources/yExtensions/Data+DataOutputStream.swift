@@ -1,6 +1,6 @@
 /* *************************************************************************************************
  Data+DataOutputStream.swift
-   © 2018-2020 YOCKOW.
+   © 2018-2020,2024 YOCKOW.
      Licensed under MIT License.
      See "LICENSE.txt" for more information.
  ************************************************************************************************ */
@@ -24,6 +24,6 @@ extension MutableDataProtocol {
   }
 }
 
-extension Data: DataOutputStream, DataOutputStreamable {}
+extension Foundation.Data: yProtocols.DataOutputStream, yProtocols.DataOutputStreamable {}
 
 

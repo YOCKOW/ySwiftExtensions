@@ -1,6 +1,6 @@
 /* *************************************************************************************************
  BidirectionalCollection+Trimming.swift
-   © 2023 YOCKOW.
+   © 2023-2024 YOCKOW.
      Licensed under MIT License.
      See "LICENSE.txt" for more information.
  ************************************************************************************************ */
