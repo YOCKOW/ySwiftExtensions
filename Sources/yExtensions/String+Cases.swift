@@ -1,6 +1,6 @@
 /* *************************************************************************************************
  String+Cases.swift
-   © 2019 YOCKOW.
+   © 2019,2024 YOCKOW.
      Licensed under MIT License.
      See "LICENSE.txt" for more information.
  ************************************************************************************************ */
@@ -11,6 +11,49 @@ extension StringProtocol {
       return String(self)
     }
     return self.capitalized
+  }
+}
+
+private extension Unicode.Scalar {
+  var _isAsciiNumeric: Bool {
+    return ("0"..."9").contains(self)
+  }
+}
+
+private extension Collection where Element: StringProtocol {
+  func _joinedForCamelCase(lower: Bool) -> String {
+    guard let firstWord = self.first.map({
+      lower ? $0.lowercased() : $0._capitalizedForCamelCase
+    }) else {
+      return ""
+    }
+    var previousWord = firstWord
+    var result = String(firstWord)
+    for word in self.dropFirst() {
+      guard !word.isEmpty else {
+        continue
+      }
+
+      func __requireSplitter() -> Bool {
+        if (
+          previousWord.unicodeScalars.last!._isAsciiNumeric &&
+          word.unicodeScalars.first!._isAsciiNumeric
+        ) {
+          return true
+        }
+        if previousWord.allSatisfy(\.isUppercase) && word.allSatisfy(\.isUppercase) {
+          return true
+        }
+        return false
+      }
+
+      if __requireSplitter() {
+        result += "_"
+      }
+      result += word._capitalizedForCamelCase
+      previousWord = String(word)
+    }
+    return result
   }
 }
 
@@ -48,13 +91,10 @@ extension StringProtocol where SubSequence == Substring {
               element[indexWhereSplitted..<element.endIndex]]
     }
   }
-  
+
   /// Returns a converted string using `lowerCamelCase`.
   public var lowerCamelCase: String {
-    let splitted = self._splittedForCaseConversion()
-    guard let first = splitted.first else { return "" }
-    let rest = splitted.dropFirst()
-    return first.lowercased() + rest.map({ $0._capitalizedForCamelCase }).joined()
+    return self._splittedForCaseConversion()._joinedForCamelCase(lower: true)
   }
   
   /// Returns a converted string where the words are separated with "_".
@@ -64,6 +104,6 @@ extension StringProtocol where SubSequence == Substring {
   
   /// Returns a converted string using `UpperCamelCase`.
   public var upperCamelCase: String {
-    return self._splittedForCaseConversion().map({ $0._capitalizedForCamelCase }).joined()
+    return self._splittedForCaseConversion()._joinedForCamelCase(lower: false)
   }
 }

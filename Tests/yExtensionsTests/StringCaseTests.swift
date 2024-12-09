@@ -17,6 +17,8 @@ import Testing
     #expect("hypertext-transfer-protocol".upperCamelCase == "HypertextTransferProtocol")
     #expect("CCC10".lowerCamelCase == "ccc10")
     #expect("CCC10".upperCamelCase == "CCC10")
+    #expect("ABC-1-2-3".lowerCamelCase == "abc1_2_3")
+    #expect("ABC-DEF-ghi".upperCamelCase == "ABC_DEFGhi")
   }
 
   @Test func snakeCase() {
