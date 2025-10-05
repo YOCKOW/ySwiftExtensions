@@ -8,7 +8,7 @@
 import Foundation
 @_exported import yProtocols
 
-extension Swift.String: yProtocols.LosslessDataConvertible {
+extension Swift.String: yProtocols.CustomDataConvertible, yProtocols.LosslessDataConvertible {
   public var dataRepresentation: Data {
     return Data(self.utf8)
   }

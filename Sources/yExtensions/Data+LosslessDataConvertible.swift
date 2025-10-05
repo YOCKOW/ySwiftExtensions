@@ -8,7 +8,7 @@
 import Foundation
 @_exported import yProtocols
 
-extension Foundation.Data: yProtocols.LosslessDataConvertible {
+extension Foundation.Data: yProtocols.CustomDataConvertible, yProtocols.LosslessDataConvertible {
   public var dataRepresentation: Data {
     return self
   }

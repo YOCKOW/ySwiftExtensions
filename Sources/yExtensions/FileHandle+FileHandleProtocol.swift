@@ -10,7 +10,10 @@ import Foundation
 
 @available(swift 5.0)
 @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
-extension Foundation.FileHandle: yProtocols.FileHandleProtocol {}
+extension Foundation.FileHandle: yProtocols.DataOutputStream,
+                                 yProtocols.DataOutputStreamable,
+                                 Swift.TextOutputStream,
+                                 yProtocols.FileHandleProtocol {}
 
 // Workaround for https://bugs.swift.org/browse/SR-11922
 #if !canImport(ObjectiveC) && swift(<5.3)
