@@ -124,7 +124,7 @@ private let subdata = data[0x04..<0x0C]
     #expect(subdata == subdata[relativeBounds: 0...7])
     #expect(subdata == subdata[relativeBounds: 0..<8])
     #expect(subdata == subdata[relativeBounds: 0...])
-    #expect(subdata == subdata[relativeBounds: (-1)<...7])
+    #expect(subdata == subdata[relativeBounds: (-1)<..7])
     #expect(subdata == subdata[relativeBounds: (-1)<..<8])
     #expect(subdata == subdata[relativeBounds: (-1)<..])
     #expect(subdata == subdata[relativeBounds: ...7])
