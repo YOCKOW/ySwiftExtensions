@@ -14,6 +14,24 @@ and is intended to be used by it.
 ## Dependencies
 
 <!-- SWIFT PACKAGE DEPENDENCIES MERMAID START -->
+```mermaid
+---
+title: yExtensions Dependencies
+---
+flowchart TD
+  swiftranges(["Ranges<br>@4.0.1"])
+  swiftunicodesupplement(["UnicodeSupplement<br>@2.0.0"])
+  yswiftextensions["yExtensions"]
+
+  click swiftranges href "https://github.com/YOCKOW/SwiftRanges.git"
+  click swiftunicodesupplement href "https://github.com/YOCKOW/SwiftUnicodeSupplement.git"
+
+  swiftunicodesupplement ----> swiftranges
+  yswiftextensions ----> swiftranges
+  yswiftextensions --> swiftunicodesupplement
+
+
+```
 <!-- SWIFT PACKAGE DEPENDENCIES MERMAID END -->
 
 # License
