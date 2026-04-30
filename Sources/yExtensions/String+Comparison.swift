@@ -28,3 +28,37 @@ extension String {
     }
   }
 }
+
+private extension UTF8.CodeUnit {
+  func _isASCIICaseInsensitivelyEqual(to other: UTF8.CodeUnit) -> Bool {
+    if self == other {
+      return true
+    }
+    if 0x41 <= self && self <= 0x5A {
+      return self + 0x20 == other
+    }
+    if 0x61 <= self && self <= 0x7A {
+      return self - 0x20 == other
+    }
+    return false
+  }
+}
+
+extension StringProtocol {
+  /// Returns the Boolean value whether or not `self` is an
+  /// [ASCII case-insensitive match](https://infra.spec.whatwg.org/#ascii-case-insensitive) for
+  /// `other`.
+  public func isASCIICaseInsensitivelyEqual(to other: String) -> Bool {
+    let (myUTF8, otherUTF8) = (self.utf8, other.utf8)
+    var (myIndex, otherIndex) = (myUTF8.startIndex, otherUTF8.startIndex)
+    while myIndex < myUTF8.endIndex && otherIndex < otherUTF8.endIndex {
+      guard myUTF8[myIndex]._isASCIICaseInsensitivelyEqual(to: otherUTF8[otherIndex]) else {
+        return false
+      }
+
+      myUTF8.formIndex(after: &myIndex)
+      otherUTF8.formIndex(after: &otherIndex)
+    }
+    return myIndex == myUTF8.endIndex && otherIndex == otherUTF8.endIndex
+  }
+}
