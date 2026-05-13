@@ -47,18 +47,28 @@ private extension UTF8.CodeUnit {
 extension StringProtocol {
   /// Returns the Boolean value whether or not `self` is an
   /// [ASCII case-insensitive match](https://infra.spec.whatwg.org/#ascii-case-insensitive) for
-  /// `other`.
-  public func isASCIICaseInsensitivelyEqual(to other: String) -> Bool {
-    let (myUTF8, otherUTF8) = (self.utf8, other.utf8)
-    var (myIndex, otherIndex) = (myUTF8.startIndex, otherUTF8.startIndex)
-    while myIndex < myUTF8.endIndex && otherIndex < otherUTF8.endIndex {
-      guard myUTF8[myIndex]._isASCIICaseInsensitivelyEqual(to: otherUTF8[otherIndex]) else {
+  /// `otherUTF8`.
+  public func isASCIICaseInsensitivelyEqual<UTF8>(to otherUTF8: UTF8) -> Bool
+  where UTF8: Sequence, UTF8.Element == Unicode.UTF8.CodeUnit {
+    var myIterator = self.utf8.makeIterator()
+    var otherIterator = otherUTF8.makeIterator()
+
+    while let myByte = myIterator.next() {
+      guard let otherByte = otherIterator.next() else {
         return false
       }
-
-      myUTF8.formIndex(after: &myIndex)
-      otherUTF8.formIndex(after: &otherIndex)
+      guard myByte._isASCIICaseInsensitivelyEqual(to: otherByte) else {
+        return false
+      }
     }
-    return myIndex == myUTF8.endIndex && otherIndex == otherUTF8.endIndex
+    return otherIterator.next().isNil
+  }
+
+  /// Returns the Boolean value whether or not `self` is an
+  /// [ASCII case-insensitive match](https://infra.spec.whatwg.org/#ascii-case-insensitive) for
+  /// `other`.
+  @inlinable
+  public func isASCIICaseInsensitivelyEqual<S>(to other: S) -> Bool where S: StringProtocol {
+    return self.isASCIICaseInsensitivelyEqual(to: other.utf8)
   }
 }
