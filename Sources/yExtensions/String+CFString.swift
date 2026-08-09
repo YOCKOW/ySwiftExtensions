@@ -16,14 +16,16 @@ extension String {
                                                        CFString.Encoding.utf8.rawValue) + 1
     let buffer = UnsafeMutablePointer<CChar>.allocate(capacity:bufferSize)
     defer { buffer.deallocate() }
-    
-    
+
+
     guard CFStringGetCString(cfString, buffer, bufferSize, CFString.Encoding.utf8.rawValue) else {
       return nil
     }
     self.init(utf8String:buffer)
   }
+}
 
+extension StringProtocol {
   public var coreFoundationString: CFString {
     return self.withCString { (cString:UnsafePointer<CChar>) -> CFString in
       return CFStringCreateWithCString(nil, cString, CFString.Encoding.utf8.rawValue)

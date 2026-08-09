@@ -19,8 +19,8 @@ and is intended to be used by it.
 title: yExtensions Dependencies
 ---
 flowchart TD
-  swiftranges(["Ranges<br>@4.0.1"])
-  swiftunicodesupplement(["UnicodeSupplement<br>@2.0.0"])
+  swiftranges(["Ranges<br>@4.0.2"])
+  swiftunicodesupplement(["UnicodeSupplement<br>@2.0.1"])
   yswiftextensions["yExtensions"]
 
   click swiftranges href "https://github.com/YOCKOW/SwiftRanges.git"

@@ -3,11 +3,11 @@
 //# Please see documents in this project to learn how to regenerate.
 //# The material(s) to generate this file was/were obtained from below:
 //
-// URL: https://raw.githubusercontent.com/apple/swift-corelibs-foundation/main/CoreFoundation/String.subproj/CFString.h
-// ETag: W/"83e5d78bb3bb36d5a6d60f112e9fe1028f840b3496fa21b1f34841345fc8f74f"
+// URL: https://raw.githubusercontent.com/swiftlang/swift-corelibs-foundation/refs/heads/main/Sources/CoreFoundation/include/CFString.h
+// ETag: "23550b7e19238cbfc617e6144f290be1fe5518f06bbc456c8e1604f8687b9b8f"
 //
-// URL: https://raw.githubusercontent.com/apple/swift-corelibs-foundation/main/CoreFoundation/String.subproj/CFStringEncodingExt.h
-// ETag: W/"4ba9e6ff74a97d02ff591804522d7648b0f0b19040d689365c7fbed4b1ad0ff3"
+// URL: https://raw.githubusercontent.com/swiftlang/swift-corelibs-foundation/refs/heads/main/Sources/CoreFoundation/include/CFStringEncodingExt.h
+// ETag: "1c937477d22ba54c0b1bdd3b4c6c112d4676bf1a6b95383d7725aa8cfa9e30f2"
 
 import CoreFoundation
 
@@ -137,28 +137,28 @@ extension CFString.Encoding {
   public static let windowsVietnamese = CFString.Encoding(rawValue: 0x508)
   public static let windowsKoreanJohab = CFString.Encoding(rawValue: 0x510)
   public static let ansel = CFString.Encoding(rawValue: 0x601)
-  public static let jisX020176 = CFString.Encoding(rawValue: 0x620)
-  public static let jisX020883 = CFString.Encoding(rawValue: 0x621)
-  public static let jisX020890 = CFString.Encoding(rawValue: 0x622)
-  public static let jisX021290 = CFString.Encoding(rawValue: 0x623)
-  public static let jisC622678 = CFString.Encoding(rawValue: 0x624)
+  public static let jisX0201_76 = CFString.Encoding(rawValue: 0x620)
+  public static let jisX0208_83 = CFString.Encoding(rawValue: 0x621)
+  public static let jisX0208_90 = CFString.Encoding(rawValue: 0x622)
+  public static let jisX0212_90 = CFString.Encoding(rawValue: 0x623)
+  public static let jisC6226_78 = CFString.Encoding(rawValue: 0x624)
   public static let shiftJISX0213 = CFString.Encoding(rawValue: 0x628)
-  public static let shiftJISX021300 = CFString.Encoding(rawValue: 0x628)
+  public static let shiftJISX0213_00 = CFString.Encoding(rawValue: 0x628)
   public static let shiftJISX0213MenKuTen = CFString.Encoding(rawValue: 0x629)
-  public static let gb231280 = CFString.Encoding(rawValue: 0x630)
+  public static let gb2312_80 = CFString.Encoding(rawValue: 0x630)
   public static let gbk95 = CFString.Encoding(rawValue: 0x631)
-  public static let gb180302000 = CFString.Encoding(rawValue: 0x632)
-  public static let ksc560187 = CFString.Encoding(rawValue: 0x640)
-  public static let ksc560192Johab = CFString.Encoding(rawValue: 0x641)
-  public static let cns1164392P1 = CFString.Encoding(rawValue: 0x651)
-  public static let cns1164392P2 = CFString.Encoding(rawValue: 0x652)
-  public static let cns1164392P3 = CFString.Encoding(rawValue: 0x653)
+  public static let gb18030_2000 = CFString.Encoding(rawValue: 0x632)
+  public static let ksc5601_87 = CFString.Encoding(rawValue: 0x640)
+  public static let ksc5601_92Johab = CFString.Encoding(rawValue: 0x641)
+  public static let cns11643_92P1 = CFString.Encoding(rawValue: 0x651)
+  public static let cns11643_92P2 = CFString.Encoding(rawValue: 0x652)
+  public static let cns11643_92P3 = CFString.Encoding(rawValue: 0x653)
   public static let iso2022JP = CFString.Encoding(rawValue: 0x820)
   public static let iso2022JP2 = CFString.Encoding(rawValue: 0x821)
   public static let iso2022JP1 = CFString.Encoding(rawValue: 0x822)
   public static let iso2022JP3 = CFString.Encoding(rawValue: 0x823)
   public static let iso2022CN = CFString.Encoding(rawValue: 0x830)
-  public static let iso2022CNEXT = CFString.Encoding(rawValue: 0x831)
+  public static let iso2022CN_EXT = CFString.Encoding(rawValue: 0x831)
   public static let iso2022KR = CFString.Encoding(rawValue: 0x840)
   public static let eucJP = CFString.Encoding(rawValue: 0x920)
   public static let eucCN = CFString.Encoding(rawValue: 0x930)
