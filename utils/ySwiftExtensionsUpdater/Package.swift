@@ -1,4 +1,4 @@
-// swift-tools-version:5.1
+// swift-tools-version:6.2
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -6,10 +6,10 @@ import PackageDescription
 let package = Package(
   name: "yExtensionsUpdater",
   platforms: [
-    .macOS("10.15.4"), // Workaround for https://bugs.swift.org/browse/SR-13859
-    .iOS(.v13),
-    .watchOS(.v6),
-    .tvOS(.v13),
+    .macOS(.v13),
+    .iOS(.v16),
+    .watchOS(.v9),
+    .tvOS(.v16),
   ],
   products: [
     // Products define the executables and libraries produced by a package, and make them visible to other packages.
@@ -18,9 +18,9 @@ let package = Package(
   ],
   dependencies: [
     // Dependencies declare other packages that this package depends on.
-    .package(url: "https://github.com/YOCKOW/SwiftStringComposition.git", from: "2.0.0"),
-    .package(url: "https://github.com/YOCKOW/ySwiftCodeUpdater.git", from: "2.0.2"),
-    .package(url: "https://github.com/YOCKOW/ySwiftExtensions.git", from: "1.5.2"),
+    .package(url: "https://github.com/YOCKOW/SwiftStringComposition.git", from: "3.0.0"),
+    .package(url: "https://github.com/YOCKOW/ySwiftCodeUpdater.git", from: "4.1.2"),
+    .package(url: "https://github.com/YOCKOW/ySwiftExtensions.git", from: "2.1.0"),
   ],
   targets: [
     // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -58,5 +58,8 @@ if ProcessInfo.processInfo.environment["YOCKOW_USE_LOCAL_PACKAGES"] != nil {
     let dirName = url.deletingPathExtension().lastPathComponent
     return "../../../\(dirName)"
   }
-  package.dependencies = package.dependencies.map { .package(path: localPath(with: $0.url)) }
+  package.dependencies = package.dependencies.map {
+    guard case .sourceControl(_, let location, _) = $0.kind else { fatalError("Unexpected dependency.") }
+    return .package(path: localPath(with: location))
+  }
 }

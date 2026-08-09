@@ -1,6 +1,6 @@
 /* *************************************************************************************************
  yExtensionsUpdater.swift
-  © 2020 YOCKOW.
+  © 2020,2026 YOCKOW.
     Licensed under MIT License.
     See "LICENSE.txt" for more information.
  ************************************************************************************************ */
@@ -12,7 +12,7 @@ import yCodeUpdater
 import yExtensions
 
 private let _yExtensionsDirectory = ({ () -> URL in
-  var url = URL(fileURLWithPath: #file, isDirectory: false)
+  var url = URL(fileURLWithPath: #filePath, isDirectory: false)
   for _ in 0..<5 { url = url.deletingLastPathComponent() }
   url.appendPathComponent("Sources/yExtensions", isDirectory: true)
   return url
@@ -55,15 +55,15 @@ public final class yExtensionsUpdaterDelegate: CodeUpdaterDelegate {
   public init() {}
   
   public typealias IntermediateDataType = Intermediate
-  public struct Intermediate {
+  public struct Intermediate: Sendable {
     public let copyrightNotice: StringLines
     public let encodingTable: [String: CFStringEncoding]
   }
   
   public var sourceURLs: Array<URL> {
     return [
-      "https://raw.githubusercontent.com/apple/swift-corelibs-foundation/main/CoreFoundation/String.subproj/CFString.h",
-      "https://raw.githubusercontent.com/apple/swift-corelibs-foundation/main/CoreFoundation/String.subproj/CFStringEncodingExt.h",
+      "https://raw.githubusercontent.com/swiftlang/swift-corelibs-foundation/refs/heads/main/Sources/CoreFoundation/include/CFString.h",
+      "https://raw.githubusercontent.com/swiftlang/swift-corelibs-foundation/refs/heads/main/Sources/CoreFoundation/include/CFStringEncodingExt.h",
     ].map { URL(string: $0)! }
   }
   
@@ -71,44 +71,46 @@ public final class yExtensionsUpdaterDelegate: CodeUpdaterDelegate {
     return _yExtensionsDirectory.appendingPathComponent("CFStringEncodings.swift")
   }
   
-  public func prepare(sourceURL: URL) throws -> IntermediateDataContainer<Intermediate> {
+  public func prepare(sourceURL: URL) async throws -> IntermediateDataContainer<Intermediate> {
     enum _Error: Error {
       case stringConversionFailure
       case copyrightNoticeNotFound
       case unexpectedLine(String)
     }
     
-    let data = yCodeUpdater.content(of: sourceURL)
-    guard let string = String(data: data, encoding: .utf8) else { throw _Error.stringConversionFailure }
-    let lines = StringLines(string)
-    
-    guard let firstCommentEndLineIndex = lines.firstIndex(where: { $0.payloadProperties.isEqual(to: "*/") }) else {
-      throw _Error.copyrightNoticeNotFound
-    }
-    
-    let copyrightNotice = StringLines(lines[0...firstCommentEndLineIndex].map({
-      String.Line($0.payload._trimCommentMarks())!
-    }))
-    var encodings: [String: CFStringEncoding] = [:]
-    
-    let prefix = "kCFStringEncoding"
-    for line in lines[(firstCommentEndLineIndex + 1)...] {
-      let payload = line.payload
-      guard payload.hasPrefix(prefix) else { continue }
-      let splitted = payload.split(whereSeparator: { $0.isWhitespace })
-      guard let indexOfEqual = splitted.firstIndex(of: "="), indexOfEqual < splitted.endIndex - 1 else {
-        throw _Error.unexpectedLine(payload)
+    return try await JobManager.default.do("Fetching \(sourceURL.absoluteString)", jobID: "Preparation") { context in
+      let data = try await context.content(of: sourceURL)
+      guard let string = String(data: data, encoding: .utf8) else { throw _Error.stringConversionFailure }
+      let lines = StringLines(string)
+
+      guard let firstCommentEndLineIndex = lines.firstIndex(where: { $0.payloadProperties.isEqual(to: "*/") }) else {
+        throw _Error.copyrightNoticeNotFound
       }
-      
-      let name = splitted[0].dropFirst(prefix.count).lowerCamelCase
-      let encoding = CFStringEncoding(_string: splitted[indexOfEqual + 1])
-      encodings[name] = encoding
+
+      let copyrightNotice = StringLines(lines[0...firstCommentEndLineIndex].map({
+        String.Line($0.payload._trimCommentMarks())!
+      }))
+      var encodings: [String: CFStringEncoding] = [:]
+
+      let prefix = "kCFStringEncoding"
+      for line in lines[(firstCommentEndLineIndex + 1)...] {
+        let payload = line.payload
+        guard payload.hasPrefix(prefix) else { continue }
+        let splitted = payload.split(whereSeparator: { $0.isWhitespace })
+        guard let indexOfEqual = splitted.firstIndex(of: "="), indexOfEqual < splitted.endIndex - 1 else {
+          throw _Error.unexpectedLine(payload)
+        }
+
+        let name = splitted[0].dropFirst(prefix.count).lowerCamelCase
+        let encoding = CFStringEncoding(_string: splitted[indexOfEqual + 1])
+        encodings[name] = encoding
+      }
+
+      return .init(content: Intermediate(copyrightNotice: copyrightNotice, encodingTable: encodings))
     }
-    
-    return .init(content: Intermediate(copyrightNotice: copyrightNotice, encodingTable: encodings))
   }
   
-  public func convert<S>(_ intermediates: S) throws -> Data where S: Sequence, S.Element == IntermediateDataContainer<Intermediate> {
+  public func convert<S>(_ intermediates: S) async throws -> Data where S: Sequence, S.Element == IntermediateDataContainer<Intermediate> {
     var lines = StringLines()
     
     lines.append("import CoreFoundation")
@@ -134,7 +136,7 @@ public final class yExtensionsUpdaterDelegate: CodeUpdaterDelegate {
         }
       })
       for (name, encoding) in sortedPairs {
-        lines.append(String.Line("public static let \(name.swiftIdentifier) = CFString.Encoding(rawValue: 0x\(String(encoding, radix: 16, uppercase: true)))", indentLevel: 1)!)
+        lines.append(String.Line("public static let \(try await name.swiftIdentifier) = CFString.Encoding(rawValue: 0x\(String(encoding, radix: 16, uppercase: true)))", indentLevel: 1)!)
       }
       lines.append("}")
       lines.appendEmptyLine()
