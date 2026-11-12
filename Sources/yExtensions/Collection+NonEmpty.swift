@@ -5,6 +5,8 @@
      See "LICENSE.txt" for more information.
  ************************************************************************************************ */
 
+import yProtocols
+
 public struct NonEmpty<Collection> where Collection: Swift.Collection {
   private var _collection: Collection
 
@@ -138,5 +140,51 @@ extension NonEmpty: CustomStringConvertible where Collection: CustomStringConver
 extension NonEmpty: CustomDebugStringConvertible where Collection: CustomDebugStringConvertible {
   public var debugDescription: String {
     return self._collection.debugDescription
+  }
+}
+
+extension NonEmpty: ExpressibleByArrayLiteral where Collection: ExpressibleByArrayLiteral {
+  public typealias ArrayLiteralElement = Collection.ArrayLiteralElement
+
+  public init(arrayLiteral elements: ArrayLiteralElement...) {
+    let collection = elements.pass(to: Collection.init(arrayLiteral:))
+    precondition(!collection.isEmpty, "Empty collection?!")
+    self.init(_nonEmptyCollection: collection)
+  }
+}
+
+extension NonEmpty: ExpressibleByDictionaryLiteral where Collection: ExpressibleByDictionaryLiteral {
+  public typealias Key = Collection.Key
+  public typealias Value = Collection.Value
+
+  public init(dictionaryLiteral elements: (Key, Value)...) {
+    let collection = elements.pass(to: Collection.init(dictionaryLiteral:))
+    precondition(!collection.isEmpty, "Empty array?!")
+    self.init(_nonEmptyCollection: collection)
+  }
+}
+
+extension NonEmpty where Collection: DictionaryProtocol {
+  public var keys: Collection.Keys {
+    return _collection.keys
+  }
+
+  public var values: Collection.Values {
+    return _collection.values
+  }
+
+  public func index(forKey key: Collection.Key) -> Index? {
+    return _collection.index(forKey: key)
+  }
+
+  public subscript(key: Collection.Key) -> Collection.Value? {
+    return _collection[key]
+  }
+
+  subscript(
+    key: Collection.Key,
+    default defaultValue: @autoclosure () -> Collection.Value
+  ) -> Collection.Value {
+    return _collection[key, default: defaultValue()]
   }
 }

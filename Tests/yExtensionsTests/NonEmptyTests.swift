@@ -23,4 +23,16 @@ import Testing
     #expect(nonEmptyArray.count == 8)
     #expect(nonEmptyArray.elementsEqual([-3, -2, -1, 0, 1, 2, 3, 4]))
   }
+
+  @Test func test_arrayLiteral() {
+    let array: NonEmpty<Array<Int>> = [0, 1, 2]
+    #expect(array.count == 3)
+  }
+
+  @Test func test_dictionaryLiteral() {
+    let dictionary: NonEmpty<Dictionary<String, String>> = ["a": "A", "b": "B"]
+    #expect(dictionary.count == 2)
+    #expect(dictionary["a"] == "A")
+    #expect(dictionary["b"] == "B")
+  }
 }
