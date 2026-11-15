@@ -8,11 +8,16 @@
 import yProtocols
 
 public struct NonEmpty<Collection> where Collection: Swift.Collection {
-  private var _collection: Collection
+  /// The collection which is never empty.
+  public internal(set) var collection: Collection {
+    didSet {
+      assert(!collection.isEmpty)
+    }
+  }
 
   fileprivate init(_nonEmptyCollection collection: Collection) {
     assert(!collection.isEmpty)
-    self._collection = collection
+    self.collection = collection
   }
 
   @inlinable
@@ -28,14 +33,14 @@ public struct NonEmpty<Collection> where Collection: Swift.Collection {
   }
 
   public func map<T, E>(_ transform: (Collection.Element) throws(E) -> T) throws(E) -> NonEmpty<Array<T>> {
-    return NonEmpty<Array<T>>(_nonEmptyCollection: try self._collection.map(transform))
+    return NonEmpty<Array<T>>(_nonEmptyCollection: try self.collection.map(transform))
   }
 
   public func flatMap<SegmentOfResult>(
     _ transform: (Collection.Element) throws -> NonEmpty<SegmentOfResult>
   ) rethrows -> NonEmpty<Array<SegmentOfResult.Element>> where SegmentOfResult: Swift.Collection {
     return NonEmpty<Array<SegmentOfResult.Element>>(
-      _nonEmptyCollection: try self._collection.flatMap(transform)
+      _nonEmptyCollection: try self.collection.flatMap(transform)
     )
   }
 }
@@ -52,43 +57,50 @@ extension NonEmpty: Sequence {
   public typealias Iterator = Collection.Iterator
 
   public func makeIterator() -> Collection.Iterator {
-    return self._collection.makeIterator()
+    return self.collection.makeIterator()
   }
 }
 
 extension NonEmpty: Swift.Collection {
   public typealias Index = Collection.Index
 
+  @inlinable
   public var startIndex: Collection.Index {
-    return self._collection.startIndex
+    return self.collection.startIndex
   }
 
+  @inlinable
   public var endIndex: Collection.Index {
-    return self._collection.endIndex
+    return self.collection.endIndex
   }
 
+  @inlinable
   public func index(after i: Index) -> Index {
-    return self._collection.index(after: i)
+    return self.collection.index(after: i)
   }
 
+  @inlinable
   public subscript(position: Index) -> Element {
-    _read {
-      yield self._collection[position]
+    get {
+      return self.collection[position]
     }
   }
 
+  @inlinable
   public var first: Element {
-    return _collection[_collection.startIndex]
+    return collection[collection.startIndex]
   }
 }
 
 extension NonEmpty: BidirectionalCollection where Collection: BidirectionalCollection {
+  @inlinable
   public func index(before i: Index) -> Index {
-    return self._collection.index(before: i)
+    return self.collection.index(before: i)
   }
 
+  @inlinable
   public var last: Element {
-    return _collection[_collection.index(before: _collection.endIndex)]
+    return collection[collection.index(before: collection.endIndex)]
   }
 }
 
@@ -96,11 +108,11 @@ extension NonEmpty: RandomAccessCollection where Collection: RandomAccessCollect
 
 extension NonEmpty: MutableCollection where Collection: MutableCollection {
   public subscript(position: Index) -> Element {
-    _read {
-      yield self._collection[position]
+    @inlinable get {
+      return self.collection[position]
     }
-    _modify {
-      yield &self._collection[position]
+    set {
+      self.collection[position] = newValue
     }
   }
 }
@@ -114,32 +126,34 @@ extension NonEmpty where Collection: RangeReplaceableCollection {
   }
 
   public mutating func append(_ newElement: Element) {
-    self._collection.append(newElement)
+    self.collection.append(newElement)
   }
 
   public mutating func append<S>(contentsOf newElements: S) where S: Sequence, S.Element == Element {
-    self._collection.append(contentsOf: newElements)
+    self.collection.append(contentsOf: newElements)
   }
 
   public mutating func insert(_ newElement: Self.Element, at i: Self.Index) {
-    self._collection.insert(newElement, at: i)
+    self.collection.insert(newElement, at: i)
   }
 
   public mutating func insert<S>(contentsOf newElements: S, at i: Self.Index)
   where S: Swift.Collection, Self.Element == S.Element {
-    self._collection.insert(contentsOf: newElements, at: i)
+    self.collection.insert(contentsOf: newElements, at: i)
   }
 }
 
 extension NonEmpty: CustomStringConvertible where Collection: CustomStringConvertible {
+  @inlinable
   public var description: String {
-    return self._collection.description
+    return self.collection.description
   }
 }
 
 extension NonEmpty: CustomDebugStringConvertible where Collection: CustomDebugStringConvertible {
+  @inlinable
   public var debugDescription: String {
-    return self._collection.debugDescription
+    return self.collection.debugDescription
   }
 }
 
@@ -165,26 +179,31 @@ extension NonEmpty: ExpressibleByDictionaryLiteral where Collection: Expressible
 }
 
 extension NonEmpty where Collection: DictionaryProtocol {
+  @inlinable
   public var keys: Collection.Keys {
-    return _collection.keys
+    return collection.keys
   }
 
+  @inlinable
   public var values: Collection.Values {
-    return _collection.values
+    return collection.values
   }
 
+  @inlinable
   public func index(forKey key: Collection.Key) -> Index? {
-    return _collection.index(forKey: key)
+    return collection.index(forKey: key)
   }
 
+  @inlinable
   public subscript(key: Collection.Key) -> Collection.Value? {
-    return _collection[key]
+    return collection[key]
   }
 
+  @inlinable
   subscript(
     key: Collection.Key,
     default defaultValue: @autoclosure () -> Collection.Value
   ) -> Collection.Value {
-    return _collection[key, default: defaultValue()]
+    return collection[key, default: defaultValue()]
   }
 }
